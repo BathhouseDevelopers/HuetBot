@@ -8,7 +8,9 @@ app.use(busboy());
 
 app.get('/', function (req, res) {
 	console.log('web request');
-	res.send('Hi, this is Huet bot page, fell free to invite him to your chats');	
+	
+	res.sendFile(__dirname +'/public/pages/index-public.html');
+		
 	  
 	});
 
