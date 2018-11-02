@@ -1,3 +1,6 @@
+# ecliple auxilary files
+.settings
+
 # Logs
 logs
 *.log
