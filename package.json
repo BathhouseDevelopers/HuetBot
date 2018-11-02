@@ -1,0 +1,32 @@
+{
+  "name": "huet-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "node debug"
+  },
+  "engines": {
+    "node": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://huet-bot.herokuapp.com/"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "assert": "^1.4.1",
+    "dropbox": "^4.0.7",
+    "mongodb": "latest",
+    "gridfs-stream": "latest",
+    "mongoose": "latest",
+    "express": "latest",
+    "fetch": "^1.1.0",
+    "isomorphic-fetch": "^2.2.1",
+    "node-schedule": "1.3.0",
+    "node-telegram-bot-api": "latest",
+    "connect-busboy": "latest"
+  }
+}
