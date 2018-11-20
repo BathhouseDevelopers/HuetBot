@@ -4,7 +4,7 @@ require('dotenv').config()
 console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 console.log(process.env.TELEGRAM_TOKEN)
 
-
+require('dotenv').config()
 DAO = require('./DAO')
 dropbox = require('./dropbox')
 
