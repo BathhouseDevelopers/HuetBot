@@ -50,6 +50,9 @@ addJob('05 11 * * *', ai.itsFootballTime, "itsFootballTime")
 addJob('11 12 * * *', ai.itsLunchTime, "itsLunchTime")
 
 
+/*Quizz*/
+addJob('00 11 * * *', ai.itsQuizz, "itsQuizz")
+
 /*  ------ */
 
 //addJob('51 19 * * *', ai.itsJustPhoto, "itsJustPhoto")

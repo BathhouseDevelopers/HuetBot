@@ -1,12 +1,12 @@
 
 var			debug_mode = true
-			debug_mode = false
+			//debug_mode = false
 
 			 
 
 
 if (debug_mode){
-	require("./bot_stub")
+	require("./bot_telegram_test")
 }else{
 	require("./bot_telegram")
 }
@@ -25,6 +25,10 @@ module.exports = {
 		//if (chat_id=="-213919094")
 		console.log(url)
 			this.bot.sendPhoto(chat_id, url, {caption:message});
-	}
+	},
+
+
 	
+	
+
 }

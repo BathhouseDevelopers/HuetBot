@@ -4,7 +4,7 @@ dropbox = require('./dropbox')
 
 // "-213919094" - Sergey
 
-chats =["-213919094"]
+
  
 PARAMS = {skipRandom:15, responseTimeout:5}
 

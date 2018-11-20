@@ -1,5 +1,13 @@
+
+/*process.env.http_proxy="http://telega:telega@rkn.ru.com:1080"
+process.env.https_proxy="https://telega:telega@rkn.ru.com:1080"
+process.env.strict_ssl=true
+*/
+
+
 var TelegramBot = require('node-telegram-bot-api');
 _bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true});
+
  
 _bot.on('polling_error', (error) => {
 	  console.log('telegram_bot -> poolingError' + error.code);  // => 'EFATAL'
@@ -16,7 +24,7 @@ _bot.on('webhook_error', (error) => {
 
 
 _bot.on('message', function (msg) {
-	console.log('telegram_bot: onMessage');
+	console.log('telegram_bot: onMessage ' +msg.chat.id);
 	ai.onMessage(msg.chat.id, msg.from.first_name, msg.text,msg, msg.date)
 
 });
