@@ -213,7 +213,7 @@ module.exports={
 	},
 	
 	itsAnnounce: function(id, chatId){
-		console.log("itsAnounce#"+id)
+		console.log("itsAnounce#"+id+"$"+chatId)
 		DAO.announcement.getAnnouncement(id, function(obj){
 			ai.sendMessageToChat(chatId, obj.text)			
 		})
