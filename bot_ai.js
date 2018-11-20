@@ -14,7 +14,7 @@ function  getRandomFromArray(array) {
 /**
  * 
  */   
-  
+   
 
 chats = {filter: false,		 
 		 group_dev1: '-248416559',
