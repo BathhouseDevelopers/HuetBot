@@ -8,7 +8,7 @@ dropbox = require('./dropbox')
 chats = {filter: false,		 
 		 group_dev1: '-248416559',
 		 chat_sergey: '309739368',
-		 group_bania: '-248416559'}
+		 group_bania: '-213919094'}
 chats.list = [chats.group_dev1, chats.chat_sergey, chats.group_bania] //,chats.group_bania
 
 
