@@ -1,6 +1,7 @@
 var TelegramBot = require('node-telegram-bot-api');
 _bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true});
  
+
 _bot.on('polling_error', (error) => {
 	  console.log('telegram_bot -> poolingError' + error.code);  // => 'EFATAL'
 	  console.error(error);  // => 'EFATAL'	  

@@ -1,10 +1,3 @@
-
-/*process.env.http_proxy="http://telega:telega@rkn.ru.com:1080"
-process.env.https_proxy="https://telega:telega@rkn.ru.com:1080"
-process.env.strict_ssl=true
-*/
-
-
 var TelegramBot = require('node-telegram-bot-api');
 _bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true});
 
