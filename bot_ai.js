@@ -13,7 +13,7 @@ function  getRandomFromArray(array) {
 
 /**
  * 
- */ 
+ */   
  
 
 chats = {filter: false,		 
