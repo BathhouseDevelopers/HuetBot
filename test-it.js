@@ -1,11 +1,15 @@
-var m = 'as-ad'.split('-')
-console.log (m)
+var m = 'Доброе утречко!\nМолодые люди, как настроение?\n'.split('\n')
 
-var s=0
+var s= new Array()
 
-console.log(++s)
 
-assert(null, null)
+for (var i = 0; i < m.length; i++) {
+	if(m[i]!=''){
+		s.push(m[i])		
+	} 	
+} 
+
+console.log(s)
 
 
 

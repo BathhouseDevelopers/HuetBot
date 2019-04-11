@@ -1,23 +1,54 @@
 storage = require('./storage2')
 var express = require('express');
 var busboy = require('connect-busboy');
+DAO = require('./DAO')
+
 var app = express();
 app.use(express.static('public'));
 app.use(busboy());
 //app.use(express.static(__dirname + '/Views'));
 
+app.set('view engine', 'ejs');
+app.use(express.json());
+
+
+
+// ******************   Admin pages **************************/
+
 app.get('/', function (req, res) {
-	console.log('web request');
-	
-	res.sendFile(__dirname +'/public/pages/index-public.html');
-		
-	  
+	console.log('web request');	
+	res.sendFile(__dirname +'/public/pages/index-public.html');	  
 	});
 
 app.get('/adm', function (req, res) {
 	res.sendFile(__dirname +'/public/pages/index.html');	
 	  
 	});
+
+app.get('/adm-cron', function (req, res) {
+		DAO.cron.getCrons(function(doc){
+			res.render('settings-cron', {crons: doc});					  
+		});
+	})
+	
+app.get('/adm-cron-edit/:id', function (req, res) {
+	
+		if (req.params.id=="new"){
+			var doc= {_id:"new"}
+			res.render('settings-cron-edit', {obj: doc});
+		}else{
+			console.log("id:")
+			console.log(req.params.id)
+			DAO.cron.getCron(req.params.id, function(doc){
+				if (doc==null){
+					doc= {_id:'new'}
+				}
+				res.render('settings-cron-edit', {obj: doc});			
+			})	
+		}
+	})
+	
+	
 
 
 app.get('/adm-chats', function (req, res) {	  
@@ -120,18 +151,33 @@ app.get('/service/telki-get', function (req, res) {
 });
 
 
-app.get('/service/chats', function (req, res) {
-
-	
-	
-	var chats = new Array()
-	chats = [{id:1234, name:'' }, {id:1235}]
-	//chats.add({id:1234})
-	//chats.add({id:1235})
-	console.log('/service/chats requested');
-	res.send(chats);	
-	  
+app.get('/service/cron', function (req, res) {
+		console.log('/service/cron requested');
+		DAO.params.getCron(function(doc){
+			res.send(doc);
+		})
 	});
+app.get('/service/cron/:id', function (req, res) {
+	console.log('/service/cron/'+req.params.id+' requested');
+	DAO.params.getCronItem(req.params.id, function(doc){
+				res.send(doc);
+		})	
+	});
+
+app.post('/service/cron', function (req, res) {
+	console.log('POST /service/cron/ invoked');
+	console.log(req.body)
+	try{
+		DAO.cron.setCron(req.body.id, req.body.value , function(doc){
+			res.sendStatus(200)
+	})	
+	}catch(e){
+		console.error(e)
+		res.sendStatus(500)
+	}
+	
+
+});
 
 
 	

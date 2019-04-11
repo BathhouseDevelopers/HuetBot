@@ -28,6 +28,7 @@
     "node-schedule": "1.3.0",
     "node-telegram-bot-api": "latest",
     "connect-busboy": "latest",
-    "dotenv": "latest"
+    "dotenv": "latest",
+    "ejs": "latest"
   }
 }

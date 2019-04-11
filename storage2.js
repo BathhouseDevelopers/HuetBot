@@ -1,5 +1,6 @@
 const mongo = require('mongodb')		
 const MongoClient = mongo.MongoClient;
+ObjectID = require('mongodb').ObjectID
 const assert = require('assert');			 
 // Connection URL
 const url = "mongodb://"+process.env.DATABASE_TOKEN+"@ds163510.mlab.com:63510/heroku_9c9j7t6q"
@@ -49,6 +50,72 @@ module.exports={
 				  var collection = db.collection(collectionName);
 				  var newvalues ={ $set:  values}; 
 				  collection.updateOne(query, newvalues, function(err, res){
+					  callback(res)
+				  })
+			})			
+		},		
+		
+		getObjects: function(collectionName, callback){
+			console.log("storage.getObjects: from collection: "+collectionName)
+			
+			MongoClient.connect(url, function(err, client) {
+			  assert.equal(null, err);
+			  console.log("Connected successfully to server");
+			  var db = client.db(dbName);				 
+			  var collection = db.collection(collectionName);			  
+			  collection.find().toArray(function(err, doc) {
+				  	client.close();				  
+				  	assert.equal(err, null);			    
+				  	callback(doc);
+			  });			  			  		
+			});
+			
+		},
+		
+		getObjectByID: function(collectionName, _id, callback){
+			console.log("storage.getObjectBu_Id:")
+			console.log(_id)
+			
+			MongoClient.connect(url, function(err, client) {
+			  assert.equal(null, err);
+			  console.log("Connected successfully to server");
+			  var db = client.db(dbName);				 
+			  var collection = db.collection(collectionName);
+			  collection.findOne({_id: ObjectID(_id)}, function(err, doc) {
+				  	client.close();				  
+				  	assert.equal(err, null);			    
+				  	callback(doc);
+			  });			  			  		
+			});
+			
+		},
+
+		newObject: function(collectionName, values, callback){
+			console.log("storage.newObject:")
+			MongoClient.connect(url, function(err, client) {
+				  assert.equal(null, err);
+				  console.log("Connected successfully to server");
+				  var db = client.db(dbName);				 
+				  var collection = db.collection(collectionName);				 
+				  collection.save(values, function(err, res){
+					  assert.equal(err, null);
+					  callback(res)
+				  })
+			})			
+		},		
+
+		updateObjectByID: function(collectionName, _id, values, callback){
+			console.log("storage.updateObject:")
+			console.log(_id)
+			MongoClient.connect(url, function(err, client) {
+				  assert.equal(null, err);
+				  console.log("Connected successfully to server");
+				  var db = client.db(dbName);				 
+				  var collection = db.collection(collectionName);
+				  var newvalues ={ $set:  values}; 
+				  console.log({_id: ObjectID(_id)})
+				  collection.updateOne({_id: ObjectID(_id)}, newvalues, function(err, res){
+					  assert.equal(err, null);
 					  callback(res)
 				  })
 			})			
