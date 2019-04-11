@@ -21,11 +21,6 @@ var hue = require('./huificator')
 
 var 	msgCounter= 0
 var 	msgSkip=getRandomInt(PARAMS.skipRandom)
-
-greeting_morning= ["Доброе утро, девочки!", "Всем привет, как настроение?", "Эй, че такие унылые?"]
-greeting_friday= ["Пятница-развратница!", "Че, кто сегдня в кабак?", "А че, сегодня нет никакого футбика?", "Че, кто по бабам?"]
-greeting_morning_girl= ["Для поддержания утреннего стояка!", "Утренние телочки!", "#Ябвдул", "Телочки-хуёлочки", "Вдуть или не вдуть? вот в чем вопрос!"]
-greeting_everning_girl= ["Спокойной ночи, малыши!", "Приятных снов, дружок!", "Для придания вечернего настроения"]
 	
 module.exports={
 	lastMessageDateTime: new Date(),
@@ -144,66 +139,12 @@ module.exports={
 
 	},
 	
-	itsMorning: function(){
-		
-		console.log("itsMorning")
-		var msg = getRandomFromArray(greeting_morning)
-		ai.sendMessageToChats(msg)				
-	},
-	itsFridayMorning: function(){
-		console.log("itsFridayMorning")
-		ai.sendMessageToChats("Продержаться несколько часов и начинаются выходные!")				
 	
-	},
-	itsFridayAfternoon: function(){
-		console.log("itsFridayMorning")
-		var msg = getRandomFromArray(greeting_friday)
-		ai.sendMessageToChats(msg)				
-	},	
-	itsSaturdayEvening: function(){
-		console.log("itsSaturdayEvening")
-		ai.sendMessageToChats("Суббота-вечер - лучшее время для приключений! Кто куда?")
-	},
-	itsJustHappened: function(message){
-		console.log("itsJustHappened")
-		ai.sendMessageToChats(message)
-	},
-	itsSundayEvening: function(){
-		console.log("itsSundayEvening")
-		ai.sendMessageToChats("Господа, не наебениваемся сегодня - завтра на завод!")
-	},
-		
-	itsFootballTime: function(){
-		console.log("itsFootballTime")	
-		ai.getNextPhoto("football", function(url){ 
-			ai.sendPhotoToChats(url, "Поговорим о футболе")
-		})		
-	},
 	itsLunchTime: function(){
 		console.log("itsLunchTime")		
 		ai.getNextPhoto("lunch", function(url){ 
 			ai.sendPhotoToChats(url, ":-)))")
 		})
-	},
-	itsMorningGirl: function(){
-		console.log("itsMorningGirl")		
-		ai.getNextPhoto("girls", function(url){ 
-			ai.sendPhotoToChats(url, getRandomFromArray(greeting_morning_girl))
-		})		
-	},
-	itsEverningGirl: function(){
-		console.log("itsEverningGirl")		
-		ai.getNextPhoto("girls.night", function(url){ 
-			ai.sendPhotoToChats(url, getRandomFromArray(greeting_everning_girl))
-		})		
-	},
-	
-	
-	itsJustPhoto: function(){
-		console.log("itsFootballTime")	
-		ai.getNextPhoto("football", function(url){ 
-			ai.sendPhotoToChats(url, "")
-		})		
 	},
 
 	itsQuizz: function(){

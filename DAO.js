@@ -1,8 +1,33 @@
 storage = require('./storage2')
+mongodb = require('mongodb')
 
 module.exports={
 
-	
+		cron:{
+			getCrons: function(callback){
+					storage.getObjects('crons', function(obj){
+						callback(obj)											 					
+					})
+				},
+			getCron: function(id, callback){
+				storage.getObjectByID('crons', id, function(obj){
+					callback(obj)
+				})
+			},
+			setCron: function(id, obj, callback){
+				if(id==null){
+					storage.newObject('crons', obj, function(res) {
+						callback(res)
+					})					
+					
+				}else{
+					storage.updateObjectByID('crons', id, obj, function(res) {
+						callback(res)
+					})					
+				}
+			}
+							
+		},
 		settings:{
 			getValue: function(key, callback){
 				storage.getObject('settings',{key: key}, function(obj){

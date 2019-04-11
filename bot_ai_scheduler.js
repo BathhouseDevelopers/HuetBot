@@ -26,15 +26,30 @@ function addJob(cron, func, desc){
 	});	
 }
 
-addJob('40 13 * * *', ai.itsEverningGirl, "itsEverningGirl")
+
+DAO.cron.getCrons(function(crons){
+	
+	for (var i = 0; i < crons.length; i++) {
+		var cron = crons[i]		
+		if (cron.type="text-message"){	
+			
+			/*** text-message *********/
+			addJob(cron.cron, function(){				
+				var msg = getRandomFromArray(cron.text)
+				ai.sendMessageToChats(msg)								
+			}, cron.alias)
+			
+			/***********/
+			
+			
+		}		
+	}
+})
+
+
+
 
 /*
-addJob('20 19 * * 6', ai.itsSundayEvening, "itsSundayEvening")
-addJob('36 19 * * 6', ai.itsSundayEvening, "itsSundayEvening")
-addJob('40 19 * * *', ai.itsEverningGirl, "itsEverningGirl")
-*/
-
-/* =================PRODUCTION===============*/
 
 addJob('07 06 * * *', ai.itsMorning, "itsMorning")
 addJob('25 06 * * *', ai.itsMorningGirl, "itsMorningGirl")
@@ -49,9 +64,13 @@ addJob('05 19 * * 7', ai.itsSundayEvening, "itsSundayEvening")
 addJob('05 11 * * *', ai.itsFootballTime, "itsFootballTime")
 addJob('11 12 * * *', ai.itsLunchTime, "itsLunchTime")
 
+*/
 
 /*Quizz*/
+
+/*
 addJob('00 11 * * *', ai.itsQuizz, "itsQuizz")
+*/
 
 /*  ------ */
 
