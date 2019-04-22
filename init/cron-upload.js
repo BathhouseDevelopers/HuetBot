@@ -25,7 +25,18 @@ var crons = [
 				},
 				
 				{
-				    "alias": "morning-message",
+				    "alias": "morning-girl",
+				    "type": "photo-message",
+				    "cron": "35 00 * * *",
+				    "folder":"girls",
+				    "text": [
+				        "Утренние девочки",
+				        "Крастоки",
+				        "Девчули"
+				    ]
+				},				
+				{
+				    "alias": "test-message",
 				    "type": "text-message",
 				    "cron": "45 18 * * *",
 				    "text": [
