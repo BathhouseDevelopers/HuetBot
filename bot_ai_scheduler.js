@@ -2,6 +2,9 @@
 var schedule = require('node-schedule');
  
 /*
+ 
+ -3 hours
+ 
 *    *    *    *    *    *
 ┬    ┬    ┬    ┬    ┬    ┬
 │    │    │    │    │    │
@@ -14,6 +17,64 @@ var schedule = require('node-schedule');
 */
 
 
+function  getRandomIntInterval(min, max) {
+	return Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+
+function  getRandomInt(max) {
+	  return getRandomIntInterval(1, max)
+}
+
+function  getRandomFromArray(array) {
+	  return array[getRandomInt(array.length)-1]
+}
+
+
+
+module.exports = {
+		init: function(){
+			DAO.cron.getCrons(function(crons){
+				
+				for (var i = 0; i < crons.length; i++) {
+					var cron = crons[i]
+					
+					/*console.log("setting CRON: ")
+					console.log(cron)*/
+					
+					/*** text-message *********/
+					if (cron.type=="text-message"){	
+						addJob(cron.cron, function(){				
+							var msg = getRandomFromArray(cron.text)
+							ai.sendMessageToChats(msg)								
+						}, cron.alias)
+					}
+					/*** photo-message *********/
+					if (cron.type=="photo-message"){
+						var cron_ =cron.cron
+						var msg = getRandomFromArray(cron.text)
+						var folder = cron.folder
+						addJob(cron_, function(){
+							console.log(folder)
+							dropbox.getNextFile(folder, function(url){									
+								ai.sendPhotoToChats(url, msg)	
+								})							
+						}, cron.alias)
+					}
+					
+					
+				}
+			})
+		},
+		reset: function(){
+			for (var i = 0; i < schedule.scheduledJobs.length; i++) {
+				schedule.scheduledJobs[i].cancel()
+			}
+		}
+}
+
+
+
+
 function addJob(cron, func, desc){
 	var j = schedule.scheduleJob(cron, function(){
 		try{
@@ -24,27 +85,12 @@ function addJob(cron, func, desc){
 		}
 	   
 	});	
+		
+	
 }
 
 
-DAO.cron.getCrons(function(crons){
-	
-	for (var i = 0; i < crons.length; i++) {
-		var cron = crons[i]		
-		if (cron.type="text-message"){	
-			
-			/*** text-message *********/
-			addJob(cron.cron, function(){				
-				var msg = getRandomFromArray(cron.text)
-				ai.sendMessageToChats(msg)								
-			}, cron.alias)
-			
-			/***********/
-			
-			
-		}		
-	}
-})
+
 
 
 

@@ -32,20 +32,27 @@ app.get('/adm-cron', function (req, res) {
 	})
 	
 app.get('/adm-cron-edit/:id', function (req, res) {
-	
-		if (req.params.id=="new"){
-			var doc= {_id:"new"}
-			res.render('settings-cron-edit', {obj: doc});
-		}else{
-			console.log("id:")
-			console.log(req.params.id)
-			DAO.cron.getCron(req.params.id, function(doc){
-				if (doc==null){
-					doc= {_id:'new'}
-				}
-				res.render('settings-cron-edit', {obj: doc});			
-			})	
+		try{
+			if (req.params.id=="new"){
+				var doc= {_id:"new"}
+				res.render('settings-cron-edit', {obj: doc});
+			}else{
+				console.log("id:")
+				console.log(req.params.id)
+				DAO.cron.getCron(req.params.id, function(doc){
+					if (doc==null){
+						doc= {_id:'new'}
+					}
+					res.render('settings-cron-edit', {obj: doc});			
+				})	
+			}
+			
+		}catch(e){
+			console.error(e)
+			res.sendStatus(500)
+
 		}
+		
 	})
 	
 	
@@ -169,8 +176,10 @@ app.post('/service/cron', function (req, res) {
 	console.log(req.body)
 	try{
 		DAO.cron.setCron(req.body.id, req.body.value , function(doc){
+			console.log("POST save good")
+			console.log("ok")
 			res.sendStatus(200)
-	})	
+		})	
 	}catch(e){
 		console.error(e)
 		res.sendStatus(500)

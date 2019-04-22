@@ -18,6 +18,7 @@ ai = require('./bot_ai');
 bot = require("./bot_wrapper")
 
 scheduler = require('./bot_ai_scheduler')
+scheduler.init()
 
 require('./web');
 
