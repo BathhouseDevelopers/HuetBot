@@ -46,31 +46,34 @@ module.exports={
 	onMessage: function(chat_id, from, text, message_date){
 			try{
 				console.log("--MSG:"+ chat_id+": "+ from +": " + text)
-				
-				
-				if (text=="bot#quizz"){
-					this.itsQuizz()
-					return
-				}	
-				if (text=="bot#ping"){
-					bot.sendMessage(chat_id, "хуинг");					
-					return
-				}
-				    //bot#announce#msg_id#char_id , if chat_id is not passed, this chat_id will be used
-				if (text.indexOf("bot#announce")>-1){					
-					// if chatId 
-					this.itsAnnounce(text.split("#")[2], (text.split("#").length>3?text.split("#")[3]:chat_id))					
-					return
-				}
 
-				if (text=="bot#girl_everning"){
-					this.itsEverningGirl()					
-					return
-				}
+				// Check for commands				
+				if (text!=undefined&&text!=null){
+					if (text=="bot#quizz"){
+						this.itsQuizz()
+						return
+					}	
+					if (text=="bot#ping"){
+						bot.sendMessage(chat_id, "хуинг");					
+						return
+					}
+					    //bot#announce#msg_id#char_id , if chat_id is not passed, this chat_id will be used
+					if (text.indexOf("bot#announce")>-1){					
+						// if chatId 
+						this.itsAnnounce(text.split("#")[2], (text.split("#").length>3?text.split("#")[3]:chat_id))					
+						return
+					}
 
-				if (text=="bot#girl_morning"){
-					this.itsMorningGirl()					
-					return
+					if (text=="bot#girl_everning"){
+						this.itsEverningGirl()					
+						return
+					}
+
+					if (text=="bot#girl_morning"){
+						this.itsMorningGirl()					
+						return
+					}
+					
 				}
 
 				
