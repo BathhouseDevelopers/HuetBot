@@ -56,16 +56,16 @@ module.exports = {
 					}
 					/*** photo-message *********/
 					if (cron.type=="photo-message"){
-						var cron_cron =cron.cron
-						var cron_text = getRandomFromArray(cron.text) 
-						var cron_alias = cron.alias						 
-						var folder = cron.folder
+						var cron_cron   = cron.cron
+						var cron_text   = getRandomFromArray(cron.text) 
+						var cron_alias  = cron.alias						 
+						var cron_folder = cron.folder
 						console.log("setting CRON: photo-message "+ cron_alias+":"+cron_cron+":"+cron_text+":"+cron_folder)
 						
 						addJob(cron_cron, function(){
 							dropbox.getNextFile(cron_folder, function(url){									
 								ai.sendPhotoToChats(url, cron_text)	
-								})							
+								})		 					
 						}, cron_alias)
 					}
 					
