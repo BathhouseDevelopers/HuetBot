@@ -1,4 +1,5 @@
 etc/
+obsolete/
 .env
 
 # ecliple auxilary files
