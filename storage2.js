@@ -43,7 +43,8 @@ module.exports={
 		updateObject: function(collectionName, query, values, callback){
 			console.log("storage.updateObject:")
 			console.log(query)
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
+				//useNewUrlParser: true
 				  assert.equal(null, err);
 				  console.log("Connected successfully to server");
 				  var db = client.db(dbName);				 
@@ -58,7 +59,7 @@ module.exports={
 		getObjects: function(collectionName, callback){
 			console.log("storage.getObjects: from collection: "+collectionName)
 			
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 			  assert.equal(null, err);
 			  console.log("Connected successfully to server");
 			  var db = client.db(dbName);				 
@@ -76,7 +77,7 @@ module.exports={
 			console.log("storage.getObjectBu_Id:")
 			console.log(_id)
 			
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 			  assert.equal(null, err);
 			  console.log("Connected successfully to server");
 			  var db = client.db(dbName);				 
@@ -92,7 +93,7 @@ module.exports={
 
 		newObject: function(collectionName, values, callback){
 			console.log("storage.newObject:")
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 				  assert.equal(null, err);
 				  console.log("Connected successfully to server");
 				  var db = client.db(dbName);				 
@@ -107,7 +108,7 @@ module.exports={
 		updateObjectByID: function(collectionName, _id, values, callback){
 			console.log("storage.updateObject:")
 			console.log(_id)
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 				  assert.equal(null, err);
 				  console.log("Connected successfully to server");
 				  var db = client.db(dbName);				 
@@ -125,7 +126,7 @@ module.exports={
 			console.log("storage.getObject:")
 			console.log(query)
 			
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 			  assert.equal(null, err);
 			  console.log("Connected successfully to server");
 			  var db = client.db(dbName);				 
@@ -143,7 +144,7 @@ module.exports={
 		getValue: function(key, callback){
 			 
 			// Use connect method to connect to the server
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 			  assert.equal(null, err);
 			  console.log("Connected successfully to server");
 			 
@@ -164,7 +165,7 @@ module.exports={
 		},
 		setValue: function(key, value){
 			// Use connect method to connect to the server
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 			  assert.equal(null, err);
 			  console.log("Connected successfully to server");
 			 
@@ -181,7 +182,7 @@ module.exports={
 
 		saveFile: function(key, value, callback){
 			// Use connect method to connect to the server
-			MongoClient.connect(url, function(err, client) {
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
 			  assert.equal(null, err);
 			  console.log("Connected successfully to server");
 			 
