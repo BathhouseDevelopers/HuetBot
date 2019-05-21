@@ -47,7 +47,7 @@ module.exports = {
 						var cron_cron = cron.cron
 						var cron_text = getRandomFromArray(cron.text) 
 						var cron_alias = cron.alias						 
-						console.log("setting CRON: text-message "+ cron_alias+":"cron_cron+":"+cron_text)	
+						console.log("setting CRON: text-message "+ cron_alias+":"+cron_cron+":"+cron_text)	
 						addJob(cron_cron, function(cc){
 							console.log(cc)
 							var msg = cron_text
@@ -56,15 +56,17 @@ module.exports = {
 					}
 					/*** photo-message *********/
 					if (cron.type=="photo-message"){
-						var cron_ =cron.cron
-						var msg = getRandomFromArray(cron.text)
+						var cron_cron =cron.cron
+						var cron_text = getRandomFromArray(cron.text) 
+						var cron_alias = cron.alias						 
 						var folder = cron.folder
-						addJob(cron_, function(){
-							console.log(folder)
-							dropbox.getNextFile(folder, function(url){									
-								ai.sendPhotoToChats(url, msg)	
+						console.log("setting CRON: photo-message "+ cron_alias+":"+cron_cron+":"+cron_text+":"+cron_folder)
+						
+						addJob(cron_cron, function(){
+							dropbox.getNextFile(cron_folder, function(url){									
+								ai.sendPhotoToChats(url, cron_text)	
 								})							
-						}, cron.alias)
+						}, cron_alias)
 					}
 					
 					
