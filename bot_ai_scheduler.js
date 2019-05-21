@@ -39,8 +39,8 @@ module.exports = {
 				for (var i = 0; i < crons.length; i++) {
 					var cron = crons[i]
 					
-					/*console.log("setting CRON: ")
-					console.log(cron)*/
+					console.log("setting CRON: ")
+					console.log(cron)
 					
 					/*** text-message *********/
 					if (cron.type=="text-message"){	

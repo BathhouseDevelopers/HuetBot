@@ -1,6 +1,7 @@
-require('isomorphic-fetch'); // or another library of choice.
+var fetch = require('isomorphic-fetch'); // or another library of choice.
 var Dropbox = require('dropbox').Dropbox;
-dbx = new Dropbox({fetch: false,  clientId: 'h2w806q9xmitayu', redirectUri:"https://ya.ru/" });
+
+dbx = new Dropbox({fetch: fetch,  clientId: 'h2w806q9xmitayu', redirectUri:"https://ya.ru/" });
 dbx.setAccessToken(process.env.DROPBOX_TOKEN)
 
 
