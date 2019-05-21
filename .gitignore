@@ -1,6 +1,7 @@
 etc/
 obsolete/
 .env
+.env_test
 
 # ecliple auxilary files
 .settings/
