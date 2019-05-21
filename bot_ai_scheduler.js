@@ -39,8 +39,7 @@ module.exports = {
 				for (var i = 0; i < crons.length; i++) {
 					var cron = crons[i]
 					
-					console.log("setting CRON: ")
-					console.log(cron)
+					
 					
 					/*** text-message *********/
 					if (cron.type=="text-message"){	
@@ -48,8 +47,9 @@ module.exports = {
 						var cron_cron = cron.cron
 						var cron_text = getRandomFromArray(cron.text) 
 						var cron_alias = cron.alias						 
-						
-						addJob(cron_cron, function(){
+						console.log("setting CRON: text-message "+ cron_alias+":"cron_cron+":"+cron_text)	
+						addJob(cron_cron, function(cc){
+							console.log(cc)
 							var msg = cron_text
 							ai.sendMessageToChats(msg)								
 						}, cron_alias)
