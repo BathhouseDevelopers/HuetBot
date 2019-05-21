@@ -1,3 +1,5 @@
+process.env.NTBA_FIX_319 = 1;
+
 var TelegramBot = require('node-telegram-bot-api');
 _bot = new TelegramBot(process.env.TELEGRAM_TOKEN, {polling: true});
  

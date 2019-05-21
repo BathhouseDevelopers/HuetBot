@@ -44,10 +44,15 @@ module.exports = {
 					
 					/*** text-message *********/
 					if (cron.type=="text-message"){	
-						addJob(cron.cron, function(){				
-							var msg = getRandomFromArray(cron.text)
+						
+						var cron_cron = cron.cron
+						var cron_text = getRandomFromArray(cron.text) 
+						var cron_alias = cron.alias						 
+						
+						addJob(cron_cron, function(){
+							var msg = cron_text
 							ai.sendMessageToChats(msg)								
-						}, cron.alias)
+						}, cron_alias)
 					}
 					/*** photo-message *********/
 					if (cron.type=="photo-message"){
