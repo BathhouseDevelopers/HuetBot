@@ -37,38 +37,48 @@ module.exports = {
 			DAO.cron.getCrons(function(crons){
 				
 				for (var i = 0; i < crons.length; i++) {
-					var cron = crons[i]
-					
-					
+					var cron = crons[i]				
+						
 					
 					/*** text-message *********/
 					if (cron.type=="text-message"){	
-						
-						var cron_cron = cron.cron
-						var cron_text = getRandomFromArray(cron.text) 
-						var cron_alias = cron.alias						 
-						console.log("setting CRON: text-message "+ cron_alias+":"+cron_cron+":"+cron_text)	
-						addJob(cron_cron, function(cc){
-							console.log(cc)
-							var msg = cron_text
-							ai.sendMessageToChats(msg)								
-						}, cron_alias)
+					  						 
+						console.log("setting CRON: "+cron.type+": "+ cron.alias+":"+cron.cron+":"+cron.text)	
+						addJob(cron.cron, function(id){
+							
+							try{
+								console.log("executing CRON " + id)
+								DAO.cron.getCron(id, function(cron){								  
+									ai.sendMessageToChats(getRandomFromArray(cron.text))																															
+								})															
+							}catch(e){
+								console.error("error invocating cron job " + id)
+								console.error(e)
+							}
+							
+						}.bind(null, cron._id), cron.alias)
 					}
 					/*** photo-message *********/
 					if (cron.type=="photo-message"){
-						var cron_cron   = cron.cron
-						var cron_text   = getRandomFromArray(cron.text) 
-						var cron_alias  = cron.alias						 
-						var cron_folder = cron.folder
-						console.log("setting CRON: photo-message "+ cron_alias+":"+cron_cron+":"+cron_text+":"+cron_folder)
 						
-						addJob(cron_cron, function(){
-							dropbox.getNextFile(cron_folder, function(url){									
-								ai.sendPhotoToChats(url, cron_text)	
-								})		 					
-						}, cron_alias)
-					}
-					
+						console.log("setting CRON: "+cron.type+": "+ cron.alias+":"+cron.cron+":"+cron.text)	
+						addJob(cron.cron, function(id){
+							try{							
+								console.log("executing CRON " + id)
+								DAO.cron.getCron(id, function(cron){								  
+									dropbox.getNextFile(cron.folder, function(url){									
+										ai.sendPhotoToChats(url, getRandomFromArray(cron.text))	
+										})		 																																				
+								})							
+							
+							}catch(e){
+								console.error("error invocating cron job " + id)
+								console.error(e)
+							}
+
+							
+						}.bind(null, cron._id), cron.alias)
+					}					
 					
 				}
 			})
@@ -99,41 +109,3 @@ function addJob(cron, func, desc){
 
 
 
-
-
-
-
-/*
-
-addJob('07 06 * * *', ai.itsMorning, "itsMorning")
-addJob('25 06 * * *', ai.itsMorningGirl, "itsMorningGirl")
-addJob('35 20 * * *', ai.itsEverningGirl, "itsEverningGirl")
-
-addJob('11 07 * * 5', ai.itsFridayMorning, "itsFridayMorning")
-addJob('10 14 * * 5', ai.itsFridayAfternoon, "itsFridayAfternoon")
-addJob('03 17 * * 6', ai.itsSaturdayEvening, "itsSaturdayEvening")
-addJob('05 19 * * 7', ai.itsSundayEvening, "itsSundayEvening")
-
-
-addJob('05 11 * * *', ai.itsFootballTime, "itsFootballTime")
-addJob('11 12 * * *', ai.itsLunchTime, "itsLunchTime")
-
-*/
-
-/*Quizz*/
-
-/*
-addJob('00 11 * * *', ai.itsQuizz, "itsQuizz")
-*/
-
-/*  ------ */
-
-//addJob('51 19 * * *', ai.itsJustPhoto, "itsJustPhoto")
-
-/*
-addJob('36 18 * * 6', function(){
-	ai.itsJustHappened("Привет, ребятки! Соскучились по мне?")
-}, "on spot")
-
-
-*/

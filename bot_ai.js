@@ -44,6 +44,12 @@ module.exports={
 
 	
 	onMessage: function(chat_id, from, text, message_date){
+		
+		// Temporary, if text null||undefined
+		if (text==null){
+			return
+		}
+		
 			try{
 				console.log("--MSG:"+ chat_id+": "+ from +": " + text)
 
