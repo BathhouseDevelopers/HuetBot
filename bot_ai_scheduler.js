@@ -1,5 +1,5 @@
 ﻿
-var schedule = require('node-schedule');
+schedule = require('node-schedule');
  
 /*
  
@@ -33,6 +33,7 @@ function  getRandomFromArray(array) {
 
 
 module.exports = {
+		//running: [],
 		init: function(){
 			DAO.cron.getCrons(function(crons){
 				
@@ -44,7 +45,7 @@ module.exports = {
 					if (cron.type=="text-message"){	
 					  						 
 						console.log("setting CRON: "+cron.type+": "+ cron.alias+":"+cron.cron+":"+cron.text)	
-						addJob(cron.cron, function(id){
+						var j = schedule.scheduleJob(cron.cron, function(id){
 							
 							try{
 								console.log("executing CRON " + id)
@@ -57,12 +58,14 @@ module.exports = {
 							}
 							
 						}.bind(null, cron._id), cron.alias)
+						
+						//module.exports.running.push(j)
 					}
 					/*** photo-message *********/
 					if (cron.type=="photo-message"){
 						
 						console.log("setting CRON: "+cron.type+": "+ cron.alias+":"+cron.cron+":"+cron.text)	
-						addJob(cron.cron, function(id){
+						var j =schedule.scheduleJob(cron.cron, function(id){
 							try{							
 								console.log("executing CRON " + id)
 								DAO.cron.getCron(id, function(cron){								  
@@ -78,34 +81,20 @@ module.exports = {
 
 							
 						}.bind(null, cron._id), cron.alias)
+						
+						//module.exports.running.push(j)
 					}					
 					
 				}
 			})
 		},
-		reset: function(){
-			for (var i = 0; i < schedule.scheduledJobs.length; i++) {
-				schedule.scheduledJobs[i].cancel()
+		reset: function(done){
+			console.log("cancelling jobs:")
+//			console.log(schedule.scheduledJobs)
+			var ss = schedule.scheduledJobs;
+			for (var i = 0; i < ss.length; i++) {
+				ss[i].cancel()
 			}
+			done()
 		}
 }
-
-
-
-
-function addJob(cron, func, desc){
-	var j = schedule.scheduleJob(cron, function(){
-		try{
-			func();
-		}catch (e) {
-			console.error("Error invocation of job "+cron+ "-" +desc)
-			console.error(e)
-		}
-	   
-	});	
-		
-	
-}
-
-
-

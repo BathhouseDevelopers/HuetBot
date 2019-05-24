@@ -30,7 +30,10 @@ module.exports={
 	},
 	
 	sendMessageToChats: function(message){
+		console.log("send message to chats")
+		console.log(chats.list)
 		for (var i = 0; i < chats.list.length; i++) {
+			console.log(chats.list[i])
 			bot.sendMessage(chats.list[i], message)	
 		}
 

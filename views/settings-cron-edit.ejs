@@ -187,12 +187,8 @@
 	    				   }	    				       				
     				  }
     		    		
-    		/*
-    	  $.post("/service/cron", JSON.stringify(obj),function(){    		      		  
-    		  window.location.href = "/adm-cron"
-    	  },"JSON").done(function() { alert("second success"); }).fail(function() { alert("error"); })
-    		*/
-    		  
+    	
+    		
     		$.ajax({method: "POST",
     			   url: "/service/cron",
     			   dataType: "json",
@@ -200,11 +196,11 @@
     			   contentType: "application/json",
 		    	   success: function(){
 		    		    	   alert( "success" );    			
-		    				}
-    		}).fail(function(jqXHR, textStatus, error) {
-    			console.log(error)
- 		       alert( "error" );
-            })
+		    				},
+	   			   error:function(data){	  			 		 
+	  					 alert(data.responseText)
+	  			 		}
+    		})
     	        
     	});
     	

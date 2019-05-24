@@ -13,5 +13,5 @@ scheduler = require('./bot_ai_scheduler')
 scheduler.init()
 
 
-require('./web');
+//require('./web');
 
