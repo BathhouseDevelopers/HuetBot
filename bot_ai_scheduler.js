@@ -21,7 +21,7 @@ var schedule = require('node-schedule');
 function  getRandomIntInterval(min, max) {
 	return Math.floor(Math.random() * (max + 1 - min)) + min;
 }
-
+ 
 function  getRandomInt(max) {
 	  return getRandomIntInterval(1, max)
 }
