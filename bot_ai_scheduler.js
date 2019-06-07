@@ -59,6 +59,12 @@ module.exports = {
 							
 						}.bind(null, cron._id), cron.alias)
 						
+						console.log(j)
+						
+						console.log("scheduled jobs:")
+						console.log(schedule.scheduledJobs)
+						
+						
 						//module.exports.running.push(j)
 					}
 					/*** photo-message *********/
