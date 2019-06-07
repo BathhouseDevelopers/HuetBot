@@ -10,7 +10,7 @@ chats = {filter: false,
 		 group_test_BotHuetBot_dev1: '-248416559',
 		 group_prod_Banya: '-187427483'}
 
-chats.list = [chats.group_prod_Huet_test, chats.group_test_BotHuetBot_dev1, group_prod_Banya]
+chats.list = [chats.group_prod_Huet_test, chats.group_test_BotHuetBot_dev1, chats.group_prod_Banya]
 
 
 PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3}
