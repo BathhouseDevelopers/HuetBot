@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CRON config</title>
+    <title>Admin - Edit CRON event</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -66,8 +66,8 @@
                         </li>
                         <li>
                             <!-- <a href="adm-chats"><i class="fa fa-dashboard fa-fw"></i>The Чяты</a> -->
-                            <a href="/adm-cron"><i class="fa fa-dashboard fa-fw"></i>Настройки-cron</a>
-                            <a href="/adm-upload"><i class="fa fa-dashboard fa-fw"></i>The Загрузить новое</a>
+                            <a href="/adm-cron"><i class="fa fa-dashboard fa-fw"></i> Настройки-cron</a>
+                            <a href="/adm-upload"><i class="fa fa-dashboard fa-fw"></i> The Загрузить новое</a>
                         </li>
                         
 
@@ -83,10 +83,19 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header"><a href="/adm-cron">В список</a></h2>
+                    <h2 class="page-header">Событие CRON</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
+            
+            <nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/adm">Админка</a></li>
+    <li class="breadcrumb-item"><a href="/adm-cron">Список событий CRON</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Редактирование CRON</li>
+  </ol>
+</nav>
+            
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-12">
@@ -120,9 +129,19 @@
 <% })} %></textarea>
                                         </div>
                                     </form>
+                                    
+<div class="alert alert-danger" role="alert" HIDDEN>
+  Ошибка сохранения
+</div>
+<div class="alert alert-success" role="alert" HIDDEN>
+  Сохранено успешно
+</div>
+                                    
                                         <div>
-                                        	<button id="save"  class="btn btn-save">Save</button>
-                                        	<button  class="btn btn-cancel">Cancel</button>
+                                            <a href="/adm" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Вернуться в список</a> &nbsp;&nbsp;&nbsp;&nbsp; 
+                                            <button id="save" class="btn btn-lg btn-primary">Save</button>
+										    <a href="/adm" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Cancel</a>
+                                        	
 										</div>
                                     
                                 </div>
@@ -162,6 +181,8 @@
     	
     	$("#save").click(function(){
     		
+    		$(".alert").hide()
+    		
     		var m =  $("#text").val().split("\n")
   
     		var s= new Array()
@@ -195,10 +216,13 @@
     			   data: JSON.stringify(obj),
     			   contentType: "application/json",
 		    	   success: function(){
-		    		    	   alert( "success" );    			
+		    		   			$(".alert-success").show()
+		    		   			console.log("success")
 		    				},
-	   			   error:function(data){	  			 		 
+	   			   error:function(data){
+	   				   console.log("error")
 	  					 alert(data.responseText)
+	  					 	$(".alert-danger").show()
 	  			 		}
     		})
     	        

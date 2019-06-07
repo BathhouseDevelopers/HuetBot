@@ -176,19 +176,21 @@ app.post('/service/cron', function (req, res) {
 	console.log(req.body)
 	try{
 		DAO.cron.setCron(req.body.id, req.body.value , function(doc){
+			
+			console.log("POST save good")
+			console.log("ok")
+			console.log("reseting loaded CRON")
+
 			scheduler.reset(function(){
-				
+				console.log("initialiting CRON")
 				scheduler.init()
-				console.log("POST save good")
-				console.log("ok")
-				console.log(res)
-				res.sendStatus(200)				
+				res.status(200).json('oka')				
 			})
 			
 		})	
 	}catch(e){
 		console.error(e)
-		res.sendStatus(500)
+		res.status(500).end(e)
 	}
 	
 

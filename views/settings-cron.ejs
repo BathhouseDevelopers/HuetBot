@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>!!!!!SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>Admin - CRON events list</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -87,13 +87,32 @@
         <div id="page-wrapper">
           
     
+                <div class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">Список событий CRON</h2>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            
+            <nav aria-label="breadcrumb">
+			  <ol class="breadcrumb">
+			    <li class="breadcrumb-item"><a href="/adm">Админка</a></li>
+			    <li class="breadcrumb-item active" aria-current="page">Список событий CRON</li>
+			  </ol>
+			</nav>
+    
+            <div >
+            		<a href='/adm-cron-edit/new' class="btn btn-primary btn-lg active" role="button" aria-pressed="true"> Новое событие</a>
+            </div>
+             
+    		<br/>
+    
             <div class="row">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            CRON
+                            List of CRON events
                         </div>
-                        <a href='/adm-cron-edit/new'>new CRON setting</a>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
                             <div class="table-responsive result">
