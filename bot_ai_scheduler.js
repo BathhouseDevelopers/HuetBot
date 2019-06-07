@@ -34,7 +34,7 @@ function  getRandomFromArray(array) {
 
 module.exports = {
 		//running: [],
-		init: function(){
+		init: function(done){
 			DAO.cron.getCrons(function(crons){
 				
 				for (var i = 0; i < crons.length; i++) {
@@ -43,9 +43,9 @@ module.exports = {
 					
 					/*** text-message *********/
 					if (cron.type=="text-message"){	
-					  						 
-						console.log("setting CRON: "+cron.type+": "+ cron.alias+":"+cron.cron+":"+cron.text)	
-						var j = schedule.scheduleJob(cron.cron, function(id){
+						
+						console.log("setting CRON: type: "+cron.type+", alias: "+ cron.alias+", cron: "+cron.cron+", text: "+cron.text)
+						var j = schedule.scheduleJob(cron.alias, cron.cron, function(id){
 							
 							try{
 								console.log("executing CRON " + id)
@@ -57,21 +57,15 @@ module.exports = {
 								console.error(e)
 							}
 							
-						}.bind(null, cron._id), cron.alias)
+						}.bind(null, cron._id))												
 						
-						console.log(j)
-						
-						console.log("scheduled jobs:")
-						console.log(schedule.scheduledJobs)
-						
-						
-						//module.exports.running.push(j)
+	
 					}
 					/*** photo-message *********/
 					if (cron.type=="photo-message"){
 						
-						console.log("setting CRON: "+cron.type+": "+ cron.alias+":"+cron.cron+":"+cron.text)	
-						var j =schedule.scheduleJob(cron.cron, function(id){
+						console.log("setting CRON: type: "+cron.type+", alias: "+ cron.alias+", cron: "+cron.cron+", text: "+cron.text)	
+						var j =schedule.scheduleJob(cron.alias, cron.cron, function(id){
 							try{							
 								console.log("executing CRON " + id)
 								DAO.cron.getCron(id, function(cron){								  
@@ -86,21 +80,35 @@ module.exports = {
 							}
 
 							
-						}.bind(null, cron._id), cron.alias)
+						}.bind(null, cron._id))
 						
-						//module.exports.running.push(j)
 					}					
 					
 				}
+				
+				if (done)done()
 			})
 		},
 		reset: function(done){
-			console.log("cancelling jobs:")
-//			console.log(schedule.scheduledJobs)
-			var ss = schedule.scheduledJobs;
-			for (var i = 0; i < ss.length; i++) {
-				ss[i].cancel()
-			}
-			done()
-		}
+			console.log("cancelling jobs:")			
+			var jobs = schedule.scheduledJobs;			
+			for(jobName in jobs){
+				schedule.cancelJob(jobName)
+				
+				// or use this:
+				//var job = jobs[jobName]
+				//job.cancel()
+			}						
+			if (done)done()
+		},
+		getScheduledJobs:function(done){
+			console.log("getScheduledJobs:")
+			var jobs = schedule.scheduledJobs;
+			var list = new Array()
+			for(jobName in jobs){
+				var job = jobs[jobName]
+				list.push({name:job.name})
+			}					
+			if (done)done(list)
+		} 
 }

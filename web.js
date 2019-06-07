@@ -25,9 +25,16 @@ app.get('/adm', function (req, res) {
 	  
 	});
 
+
+// ******************   Admin pages **************************/
+
 app.get('/adm-cron', function (req, res) {
 		DAO.cron.getCrons(function(doc){
-			res.render('settings-cron', {crons: doc});					  
+			scheduler.getScheduledJobs(function(jobs){
+				res.render('settings-cron', {crons: doc, jobs: jobs});			
+			})	
+
+					  
 		});
 	})
 	
@@ -56,7 +63,52 @@ app.get('/adm-cron-edit/:id', function (req, res) {
 	})
 	
 	
+app.get('/service/sceduled-jobs', function (req, res) {
+		console.log('/service/sceduled-jobs requested');		
+		scheduler.getScheduledJobs(function(jobs){
+			res.send(jobs)		
+		})		
+	});
 
+
+app.get('/service/cron', function (req, res) {
+		console.log('/service/cron requested');
+		DAO.params.getCron(function(doc){
+			res.send(doc);
+		})
+	});
+app.get('/service/cron/:id', function (req, res) {
+	console.log('/service/cron/'+req.params.id+' requested');
+	DAO.params.getCronItem(req.params.id, function(doc){
+				res.send(doc);
+		})	
+	});
+
+app.post('/service/cron', function (req, res) {
+	console.log('POST /service/cron/ invoked');
+	console.log(req.body)
+	try{
+		DAO.cron.setCron(req.body.id, req.body.value , function(doc){
+			
+			console.log("POST save good")
+			console.log("ok")
+			console.log("reseting loaded CRON")
+			scheduler.reset(function(){
+				console.log("initialiting CRON")
+				scheduler.init()
+				res.status(200).json('oka')				
+			})
+			
+		})	
+	}catch(e){
+		console.error(e)
+		res.status(500).end(e)
+	}
+	
+
+});
+
+// ***************************************************/
 
 app.get('/adm-chats', function (req, res) {	  
 	res.sendFile(__dirname +'/public/pages/chats.html');	
@@ -158,43 +210,9 @@ app.get('/service/telki-get', function (req, res) {
 });
 
 
-app.get('/service/cron', function (req, res) {
-		console.log('/service/cron requested');
-		DAO.params.getCron(function(doc){
-			res.send(doc);
-		})
-	});
-app.get('/service/cron/:id', function (req, res) {
-	console.log('/service/cron/'+req.params.id+' requested');
-	DAO.params.getCronItem(req.params.id, function(doc){
-				res.send(doc);
-		})	
-	});
 
-app.post('/service/cron', function (req, res) {
-	console.log('POST /service/cron/ invoked');
-	console.log(req.body)
-	try{
-		DAO.cron.setCron(req.body.id, req.body.value , function(doc){
-			
-			console.log("POST save good")
-			console.log("ok")
-			console.log("reseting loaded CRON")
 
-			scheduler.reset(function(){
-				console.log("initialiting CRON")
-				scheduler.init()
-				res.status(200).json('oka')				
-			})
-			
-		})	
-	}catch(e){
-		console.error(e)
-		res.status(500).end(e)
-	}
-	
 
-});
 
 
 	

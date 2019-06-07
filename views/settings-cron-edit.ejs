@@ -120,7 +120,12 @@
                                         <div class="form-group">
                                             <label>Cron</label>
                                             <input class="form-control" id="cron" placeholder="Enter Cron string" value="<%= obj.cron %>">
+                                        </div>
+                                            <div class="form-group">
+                                            <label>Folder</label>
+                                            <input class="form-control" id="folder" placeholder="Enter folder" value="<%= obj.folder %>" DISABLED>
                                         </div>                                        
+                                                                                
                                         <div class="form-group">
                                             <label>Text</label>
                                             <textarea class="form-control" id="text" rows="5"><% if (obj.text){obj.text.forEach(function(line){ %><%= line %>
@@ -177,6 +182,12 @@
     <script>
     $(document).ready(function() {
     	
+    	var type = "<%= obj.type %>"
+    	if (type=="photo-message"){
+    		$("#folder").prop("disabled", false)
+    	}
+    	
+    	
     	$("#save").click(function(){
     		
     		$(".alert").hide()
@@ -202,6 +213,7 @@
 	    					   alias:  $("#alias").val(),
 		    				   type :  $("#type").val(),
 		    				   cron :  $("#cron").val(),
+		    				   folder:  $("#folder").val(),
 		    				   text:s	    					   
 	    				   }	    				       				
     				  }

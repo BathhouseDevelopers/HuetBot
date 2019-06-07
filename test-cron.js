@@ -10,7 +10,10 @@ DAO = require('./DAO')
 storage = require('./storage2')
 
 scheduler = require('./bot_ai_scheduler')
-scheduler.init()
+scheduler.init(function(){
+	scheduler.getScheduledJobs()
+})
+
 
 
 //require('./web');

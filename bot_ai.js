@@ -26,7 +26,12 @@ module.exports={
 	lastMessageDateTime: new Date(),
 	
 	sendMessageToChat: function(chat_id, message){
-		bot.sendMessage(chat_id, message)
+		try{
+			bot.sendMessage(chat_id, message)	
+		}catch(e){
+			console.error(e)
+		}
+		
 	},
 	
 	sendMessageToChats: function(message){
@@ -54,7 +59,7 @@ module.exports={
 		}
 		
 			try{
-				console.log("--MSG:"+ chat_id+": "+ from +": " + text)
+				console.log("--MSG: chatId:"+ chat_id+", from: "+ from +", text: " + text)
 
 				// Check for commands				
 				if (text!=undefined&&text!=null){

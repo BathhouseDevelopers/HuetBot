@@ -150,8 +150,42 @@
                                 </table>
                             </div>
                             <!-- /.table-responsive -->
-                        </div>
+                            
+                                                    </div>
                         <!-- /.panel-body -->
+                            
+                            
+                        <div class="panel-heading">
+                            Already scheduled jobs
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                                                        <div class="table-responsive result">
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>alias</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody >
+                                    
+                                    <% jobs.forEach(function(item){ %>
+                          		  
+                         			    <tr>
+	                         				<td><%= item.name %></td>
+                          			    </tr>
+                          			
+                          		  <% }) %>
+                              	  
+                              	
+                          		  
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+                            </div>
+                            
+                            
                     </div>
                     <!-- /.panel -->
                 </div>
