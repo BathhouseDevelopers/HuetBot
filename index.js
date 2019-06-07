@@ -6,11 +6,11 @@ dropbox = require('./dropbox')
 
 
 chats = {filter: false,		 
-		 group_prod_Huet-test: '-377088509',
-		 group_test_BotHuetBot-dev1: '-248416559',
-		 group_banya: '-187427483'}
+		 group_prod_Huet_test: '-377088509',
+		 group_test_BotHuetBot_dev1: '-248416559',
+		 group_prod_Banya: '-187427483'}
 
-chats.list = [chats.group_prod_Huet-test, chats.group_test_BotHuetBot-dev1, group_banya]
+chats.list = [chats.group_prod_Huet_test, chats.group_test_BotHuetBot_dev1, group_prod_Banya]
 
 
 PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3}
