@@ -120,7 +120,23 @@ module.exports={
 					  callback(res)
 				  })
 			})			
-		},		
+		},	
+		
+		deleteObjectByID: function(collectionName, _id, callback){
+			console.log("storage.deleteObject:")
+			console.log(_id)
+			MongoClient.connect(url, { useNewUrlParser:true }, function(err, client) {
+				  assert.equal(null, err);
+				  console.log("Connected successfully to server");
+				  var db = client.db(dbName);				 
+				  var collection = db.collection(collectionName);
+
+				  collection.deleteOne({_id: ObjectID(_id)}, function(err, res){
+					  assert.equal(err, null);
+					  callback(res)
+				  })
+			})			
+		},	
 		
 		getObject: function(collectionName, query, callback){
 			console.log("storage.getObject:")

@@ -141,9 +141,10 @@
 										</div>
                                     
                                         <div>
-                                            <a href="/adm" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Вернуться в список</a> &nbsp;&nbsp;&nbsp;&nbsp; 
+                                            <a href="/adm-cron" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Вернуться в список</a> &nbsp;&nbsp;&nbsp;&nbsp; 
                                             <button id="save" class="btn btn-lg btn-primary">Save</button>
-										    <a href="/adm" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Cancel</a>
+										    <a href="/adm-cron" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Cancel</a>
+										    <button id="delete" class="btn btn-lg btn-primary btn-red"> <i class="fa fa-trash"></i> Удалить</button>
                                         	
 										</div>
                                     
@@ -186,6 +187,30 @@
     	if (type=="photo-message"){
     		$("#folder").prop("disabled", false)
     	}
+    	
+    	
+    	$("#delete").click(function(){
+    		
+    		var id = $("#_id").val()
+    		id = ((id=="new")?null:id)
+    		
+    		if (confirm("Вы уверены, что хотите удалить этот CRON?")){
+
+    			$.ajax({method: "POST",
+       			   url: "/service/cron/delete/"+id,
+   		    	   success: function(){
+   		    		  document.location.href = "/adm-cron"
+   		    				},
+   	   			   error:function(data){
+   	   				   console.log("error")
+   	  					 alert(data.responseText)
+   	  					 	$(".alert-danger").show()
+   	  			 		}
+       			})	
+
+    		
+    		}
+    	})
     	
     	
     	$("#save").click(function(){

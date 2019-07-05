@@ -25,7 +25,17 @@ module.exports={
 						callback(res)
 					})					
 				}
+			},
+			deleteCron: function(id, callback){
+				if(id==null){
+					console.log("ID===nul!!")
+				}else{
+					storage.deleteObjectByID('crons', id, function(res) {
+						callback(res)
+					})					
+				}
 			}
+
 							
 		},
 		settings:{

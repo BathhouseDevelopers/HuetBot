@@ -38,6 +38,8 @@ app.get('/adm-cron', function (req, res) {
 		});
 	})
 	
+	
+	
 app.get('/adm-cron-edit/:id', function (req, res) {
 		try{
 			if (req.params.id=="new"){
@@ -77,11 +79,33 @@ app.get('/service/cron', function (req, res) {
 			res.send(doc);
 		})
 	});
+
 app.get('/service/cron/:id', function (req, res) {
 	console.log('/service/cron/'+req.params.id+' requested');
 	DAO.params.getCronItem(req.params.id, function(doc){
 				res.send(doc);
 		})	
+	});
+
+app.post('/service/cron/delete/:id', function (req, res) {
+	console.log('/service/cron/delete/'+req.params.id+' requested');
+	try{
+		DAO.cron.deleteCron(req.params.id, function(doc){
+			
+			console.log("POST delete good")
+			console.log("ok")
+			console.log("reseting loaded CRON")
+			scheduler.reset(function(){
+				console.log("initialiting CRON")
+				scheduler.init()
+				res.status(200).end("ok")				
+			})
+			
+		})	
+	}catch(e){
+		console.error(e)
+		res.status(500).end(e)
+	}
 	});
 
 app.post('/service/cron', function (req, res) {
