@@ -31,6 +31,6 @@ _bot.on('callback_query', function onCallbackQuery(callbackQuery) {
 	  
 	  var mm = action.split('#')
 	  if (mm[0]=='quizz'){
-		  quizzMod.callback(mm, callbackQuery)
+		  quizzMod2.callback(mm, callbackQuery)
 	  }
 	});

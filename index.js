@@ -21,6 +21,12 @@ bot = require("./bot_wrapper")
 scheduler = require('./bot_ai_scheduler')
 scheduler.init()
 
+quizz = null
+
+DAO.quizz2.getQuizz2(function(data){
+	quizz = data
+})
+
 require('./web');
 
 

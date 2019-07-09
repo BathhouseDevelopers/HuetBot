@@ -166,7 +166,7 @@ module.exports={
 
 	itsQuizz: function(){
 		console.log("itsQuizz")
-		quizzMod.quizzIt()
+		quizzMod2.quizzIt()
 								
 	},
 	

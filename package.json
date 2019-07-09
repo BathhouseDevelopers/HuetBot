@@ -29,6 +29,8 @@
     "node-telegram-bot-api": "latest",
     "connect-busboy": "latest",
     "dotenv": "latest",
-    "ejs": "latest"
+    "ejs": "latest",
+    "properties-parser": "latest"
+    
   }
 }
