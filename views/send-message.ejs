@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin - Edit CRON event</title>
+    <title>Admin - sent message to chats</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -81,7 +81,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h2 class="page-header">Событие CRON</h2>
+                    <h2 class="page-header">Отправка мессаги</h2>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -89,8 +89,7 @@
             <nav aria-label="breadcrumb">
 			  <ol class="breadcrumb">
 			    <li class="breadcrumb-item"><a href="/adm">Админка</a></li>
-			    <li class="breadcrumb-item"><a href="/adm-cron">Список событий CRON</a></li>
-			    <li class="breadcrumb-item active" aria-current="page">Редактирование CRON</li>
+			    <li class="breadcrumb-item active" aria-current="page">Отправка сообщения</li>
 			  </ol>
 			</nav>
             
@@ -105,46 +104,37 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <form role="form" id="form">
+                                    
+		                                <div class="form-group">
+			                                <label for="exampleFormControlSelect2">В какие чаты</label>
+			                                <select multiple class="form-control" id="chats">			                                		
+			                                
+			                                <% for (var i = 0; i < chats.length; i++) { %>
+			                            		<option><%=chats[i]%></option>
+			                                <% } %>
+			                                
+			                                    
+			                                </select>
+		                                </div>
+                                
+                                                                                                                        
                                         <div class="form-group">
-                                            <label for="disabledSelect">_id</label>
-                                            <input disabled class="form-control" id="_id" type="text" placeholder="Disabled input" disabled value="<%= obj._id %>">
-                                        </div>                                    
-                                        <div class="form-group">
-                                            <label>Alias</label>
-                                            <input class="form-control" id="alias" placeholder="Enter alias" value="<%= obj.alias %>">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Type</label>
-                                            <input class="form-control" id="type" placeholder="Enter type" value="<%= obj.type %>">
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Cron</label>
-                                            <input class="form-control" id="cron" placeholder="Enter Cron string" value="<%= obj.cron %>">
-                                        </div>
-                                            <div class="form-group">
-                                            <label>Folder</label>
-                                            <input class="form-control" id="folder" placeholder="Enter folder" value="<%= obj.folder %>" DISABLED>
-                                        </div>                                        
-                                                                                
-                                        <div class="form-group">
-                                            <label>Text</label>
-                                            <textarea class="form-control" id="text" rows="5"><% if (obj.text){obj.text.forEach(function(line){ %><%= line %>
-<% })} %></textarea>
+                                            <label>Сообщение</label>
+                                            <textarea class="form-control" id="text" rows="5"></textarea>
                                         </div>
                                     </form>
                                     
 										<div class="alert alert-danger" role="alert" HIDDEN>
-										  Ошибка сохранения
+										  Ошибка отправления: <span id='alert_text'></span>
 										</div>
 										<div class="alert alert-success" role="alert" HIDDEN>
-										  Сохранено успешно
+										  Отправлено успешно
 										</div>
                                     
                                         <div>
-                                            <a href="/adm-cron" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Вернуться в список</a> &nbsp;&nbsp;&nbsp;&nbsp; 
-                                            <button id="save" class="btn btn-lg btn-primary">Save</button>
-										    <a href="/adm-cron" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Cancel</a>
-										    <button id="delete" class="btn btn-lg btn-primary btn-red"> <i class="fa fa-trash"></i> Удалить</button>
+                                            <a href="/adm" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Вернуться в список</a> &nbsp;&nbsp;&nbsp;&nbsp; 
+                                            <button id="send" class="btn btn-lg btn-primary">Отправить</button>
+										    <a href="/adm" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true"> Cancel</a>
                                         	
 										</div>
                                     
@@ -182,71 +172,25 @@
  <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
     $(document).ready(function() {
+    	    	
     	
-    	var type = "<%= obj.type %>"
-    	if (type=="photo-message"){
-    		$("#folder").prop("disabled", false)
-    	}
-    	
-    	
-    	$("#delete").click(function(){
-    		
-    		var id = $("#_id").val()
-    		id = ((id=="new")?null:id)
-    		
-    		if (confirm("Вы уверены, что хотите удалить этот CRON?")){
-
-    			$.ajax({method: "POST",
-       			   url: "/service/cron/delete/"+id,
-   		    	   success: function(){
-   		    		  document.location.href = "/adm-cron"
-   		    				},
-   	   			   error:function(data){
-   	   				   console.log("error")
-   	  					 alert(data.responseText)
-   	  					 	$(".alert-danger").show()
-   	  			 		}
-       			})	
-
-    		
-    		}
-    	})
-    	
-    	
-    	$("#save").click(function(){
+    	$("#send").click(function(){
     		
     		$(".alert").hide()
     		
-    		var m =  $("#text").val().split("\n")
+    		//var m =  $("#text").val().split("\n")
   
-    		var s= new Array()
-
-    		for (var i = 0; i < m.length; i++) {
-    			if(m[i]!=''){
-    				s.push(m[i])		
-    			} 	
-    		} 
-
    
-    		
-    		var id = $("#_id").val()
-    		id = ((id=="new")?null:id)
-    		
+    		    		
     		var obj = {
-	    				   id:  id,
-	    				   value: {
-	    					   alias:  $("#alias").val(),
-		    				   type :  $("#type").val(),
-		    				   cron :  $("#cron").val(),
-		    				   folder:  $("#folder").val(),
-		    				   text:s	    					   
-	    				   }	    				       				
+					   chats:  $("#chats").val(),
+    				   text:   $("#text").val()    					   
     				  }
     		    		
     	
     		
     		$.ajax({method: "POST",
-    			   url: "/service/cron",
+    			   url: "/service/message/send",
     			   dataType: "json",
     			   data: JSON.stringify(obj),
     			   contentType: "application/json",
@@ -256,9 +200,10 @@
 		    				},
 	   			   error:function(data){
 	   				   console.log("error")
-	  					 alert(data.responseText)
-	  					 	$(".alert-danger").show()
-	  			 		}
+	   				   console.log(data.responseText)	   				   
+	  					 $("#alert_text").val(data.responseText)
+	  					 $(".alert-danger").show()
+	  			 	}
     		})
     	        
     	});

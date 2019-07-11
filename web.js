@@ -28,6 +28,13 @@ app.get('/adm', function (req, res) {
 
 // ******************   Admin pages **************************/
 
+app.get('/adm-send-message', function (req, res) {
+	
+	res.render('send-message', {chats: chats.list});
+	
+})
+
+
 app.get('/adm-cron', function (req, res) {
 		DAO.cron.getCrons(function(doc){
 			scheduler.getScheduledJobs(function(jobs){
@@ -87,6 +94,22 @@ app.get('/service/cron/:id', function (req, res) {
 		})	
 	});
 
+// =====================-----------------------------------
+
+app.post('/service/message/send', function (req, res) {
+	console.log('/service/message/send'+req.body.text+' requested');
+	try{
+		
+		bot.sendMessage(req.body.chats[0], req.body.text)		
+		res.status(200).json({ok: true});					
+	}catch(e){
+		console.error(e)
+		res.status(500).json({error: e});
+
+	}
+	});
+
+
 app.post('/service/cron/delete/:id', function (req, res) {
 	console.log('/service/cron/delete/'+req.params.id+' requested');
 	try{
@@ -110,7 +133,6 @@ app.post('/service/cron/delete/:id', function (req, res) {
 
 app.post('/service/cron', function (req, res) {
 	console.log('POST /service/cron/ invoked');
-	console.log(req.body)
 	try{
 		DAO.cron.setCron(req.body.id, req.body.value , function(doc){
 			

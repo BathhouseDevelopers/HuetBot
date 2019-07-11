@@ -139,7 +139,9 @@ module.exports={
 			},
 			putQuizz2: function(quizz, callback){
 				storage.updateObject('quizz2', {type: 'quizz2'}, quizz, function(res) {
-					callback(res)
+					if (callback){
+						callback(res)
+					}
 				})
 				
 			},

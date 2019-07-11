@@ -88,6 +88,19 @@ module.exports={
 						return
 					}
 					
+					var b = quizzMod2.onAnswer(chat_id, from, text, message_date)
+					if (b){
+						return
+					}
+					
+					
+					if (text.toLowerCase().indexOf("бот, ответ")>-1){
+						console.log("user " + from+" asked for an answer")
+						quizzMod2.sayAnswer(chat_id)
+						return
+					}
+					
+					
 				}
 
 				

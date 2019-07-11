@@ -1,9 +1,4 @@
 require('dotenv').config()
-DAO = require('./DAO')
-
-storage = require('./storage2')
-dropbox = require('./dropbox')
-
 
 chats = {filter: false,		 
 		 group_prod_Huet_test: '-377088509',
@@ -15,18 +10,25 @@ chats.list = [chats.group_prod_Huet_test, chats.group_test_BotHuetBot_dev1, chat
 
 PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3}
 
-ai = require('./bot_ai');
-bot = require("./bot_wrapper")
+storage = require('./storage2')
+DAO = require('./DAO')
 
-scheduler = require('./bot_ai_scheduler')
-scheduler.init()
+dropbox = require('./dropbox')
 
-quizz = null
+context = require('./context')
+context.init(function(){
+	
+	quizzMod2 = require('./quizz_mod2')
+	ai = require('./bot_ai');
+	bot = require("./bot_wrapper")
 
-DAO.quizz2.getQuizz2(function(data){
-	quizz = data
+	scheduler = require('./bot_ai_scheduler')
+	scheduler.init(function(){
+		
+		require('./web');	
+	})
+
+	
 })
-
-require('./web');
 
 

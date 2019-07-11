@@ -3,6 +3,16 @@ const qtFileName = 'quizz.txt'
 const qFileName  = 'q.jpg'
 const aFileName  = 'a.jpeg'
 
+function  getRandomIntInterval(min, max) {
+	return Math.floor(Math.random() * (max + 1 - min)) + min;
+}
+
+function  getRandomInt(max) {
+	  return getRandomIntInterval(1, max)
+}
+function  getRandomFromArray(array) {
+	  return array[getRandomInt(array.length)-1]
+}
 
 
 	function sendtext2chats(text, options) {
@@ -16,14 +26,11 @@ function send2chats(url, options) {
 	}
 }
 
-quizzMod2 = {
+module.exports = {
 	quizzIt : function() {
 		try{
 
-			
-			DAO.quizz2.getQuizz2(function(quizz){
-				gQuizz = quizz
-				if (gQuizz.active){
+				if (glbQuizz.active){
 					throw new Error("There is active quizz2");
 				}else{
 					
@@ -31,16 +38,20 @@ quizzMod2 = {
 						console.log(folder)
 						if (folder!=null){
 							dbx.filesMoveV2({from_path: '/quizz/'+folder.name+'', to_path: '/quizz/done/'+folder.name}).then(function(data){
-								gQuizz.active = true
-								gQuizz.name = folder.name
-								gQuizz.files = folder.files
 								
-								DAO.quizz2.putQuizz2(gQuizz, function(){
+								glbQuizz.active = true
+								glbQuizz.name = folder.name
+								glbQuizz.files = folder.files
+								glbQuizz.hasQText = glbQuizz.files.indexOf(qtFileName)>-1
+								glbQuizz.hasQPic =  glbQuizz.files.indexOf(qFileName) >-1
+								glbQuizz.hasAPic =  glbQuizz.files.indexOf(aFileName) >-1
+								
+								DAO.quizz2.putQuizz2(glbQuizz, function(){
 									
 										
 										
-									if (folder.files.indexOf(qtFileName)>-1){
-										var filename = '/quizz/done/'+quizz.name+"/"+qtFileName																			
+									if (glbQuizz.hasQText){
+										var filename = '/quizz/done/'+glbQuizz.name+"/"+qtFileName																			
 										
 										dbx.filesDownload({path:filename}).then(function(response){
 											 var blob = response.fileBinary;																						
@@ -49,19 +60,23 @@ quizzMod2 = {
 								             var prop = require("node-properties-parser");
 
 								             var s = prop.parse(qfile)
-								             gQuizz.question = s.q
-								             gQuizz.answer= s.a
-								             gQuizz.words = s.k.split(',')
-								            
-								             DAO.quizz2.putQuizz2(gQuizz, function(data){
+								             glbQuizz.question = s.q
+								             glbQuizz.answer= s.a
+								             glbQuizz.words = s.k.split(',')
+ 								             for (var i = 0; i < glbQuizz.words.length; i++) {
+ 								            	glbQuizz.words[i] = glbQuizz.words[i].trim()
+										 	 }
+								             
+								             
+								             DAO.quizz2.putQuizz2(glbQuizz, function(data){
 								            	 
 								            	 console.log("saved last quizz2 object")
 								            	 
-								            	 if (gQuizz.files.indexOf(qFileName)>-1){																				
-														dbx.filesGetTemporaryLink({path:'/quizz/done/'+gQuizz.name+"/"+qFileName}).then(function(data){
+								            	 if (glbQuizz.hasQPic){																				
+														dbx.filesGetTemporaryLink({path:'/quizz/done/'+glbQuizz.name+"/"+qFileName}).then(function(data){
 															
 															var options = {
-																	caption : gQuizz.question,
+																	caption : glbQuizz.question,
 																	reply_markup : JSON.stringify({
 																		inline_keyboard : [ [ {
 																			text : 'Подсказка',
@@ -91,7 +106,7 @@ quizzMod2 = {
 														console.log("do not have qImage file")
 														
 														var options = {
-															caption : gQuizz.question,
+															caption : glbQuizz.question,
 															reply_markup : JSON.stringify({
 																inline_keyboard : [ [ {
 																	text : 'Подсказка',
@@ -103,7 +118,7 @@ quizzMod2 = {
 															})
 														};
 
-														sendtext2chats(gQuizz.question, options)	
+														sendtext2chats(glbQuizz.question, options)	
 														
 													}
 								             })
@@ -131,7 +146,7 @@ quizzMod2 = {
 						}
 					})
 				}
-			})
+			
 
 			
 			
@@ -160,5 +175,55 @@ quizzMod2 = {
 			console.error(e)
 		}
 			
+	},
+	sayAnswer:  function(chat_id, from, text, message_date){
+		
+		if (glbQuizz.hasAPic){																				
+			dbx.filesGetTemporaryLink({path:'/quizz/done/'+glbQuizz.name+"/"+aFileName}).then(function(data){
+				
+				bot.sendPhoto(chat_id, data.link, glbQuizz.answer)
+				
+				glbQuizz.active=false
+				DAO.quizz2.putQuizz2(glbQuizz)
+
+				
+			}, function(err){
+				if (err.error!=null &&err.error.error_summary=='path/not_found/...'){
+					console.log("path not found")
+					console.error(err)	
+				}else{
+					console.error(err)	
+				}
+				
+			})	
+			
+		}else{
+			console.log("do not have qImage file")					
+			bot.sendMessage(chat_id, glbQuizz.answer)			
+			
+			glbQuizz.active=false
+			DAO.quizz2.putQuizz2(glbQuizz)
+		}
+		
+	},
+	onAnswer: function(chat_id, from, text, message_date){
+		var tt = text.toLowerCase()
+		var ww = glbQuizz.words
+		
+		for (var i = 0; i < ww.length; i++) {
+			var w = ww[i].trim()
+			if (tt.indexOf(w)>-1){
+				console.log(from +" guessed")
+				bot.sendMessage(chat_id, from + ", " + getRandomFromArray(["ты умничка!", "красавелла!", "бинго!", " - молодец"]))				
+				
+				setTimeout(function () {
+					quizzMod2.sayAnswer(chat_id)	
+					    }, global.PARAMS.responseTimeout*1000) 
+				
+				
+				return true;
+			}	
+		}
+		return false;
 	}
 }

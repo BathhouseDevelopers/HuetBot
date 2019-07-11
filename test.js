@@ -1,11 +1,8 @@
 
-						             
 
 require('dotenv').config()
 DAO = require('./DAO')
 dropbox = require('./dropbox')
-
-
 
 
 PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3}
@@ -22,22 +19,24 @@ chats = {filter: false,
 chats.list = [chats.group_dev1, chats.chat_sergey] //,group_bania
 
 
-require('./quizz_mod2')
-
-gQuizz = null
-
-DAO.quizz2.getQuizz2(function(quizz){
-	gQuizz = quizz
+context = require('./context')
+context.init(function(){
+	
+	
+	quizzMod2 = require('./quizz_mod2')		
+	bot = require("./bot_wrapper")
+	
+	_bot.getMe().then(function(){
+		console.log("1")
+		if (!glbQuizz.active) quizzMod2.quizzIt();
+			
+	})
+	
 })
 
 
-bot = require("./bot_wrapper")
-_bot.getMe().then(function(){
 
 
-	quizzMod2.quizzIt();
-		
-})
 
 
 

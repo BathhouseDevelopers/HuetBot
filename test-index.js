@@ -6,21 +6,33 @@ dropbox = require('./dropbox')
 
 
 chats = {filter: false,		 
-		 group_prod_Huet-test: '-377088509',
-		 group_test_BotHuetBot-dev1: '-248416559',
-		 group_banya: '-187427483'}
+		 group_dev1: '-248416559',
+		 chat_sergey: '309739368'}
+chats.list = [chats.group_dev1, chats.chat_sergey] //,group_bania
 
-chats.list = [chats.group_prod_Huet-test, chats.group_test_BotHuetBot-dev1]
+
 
 
 PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3}
 
-ai = require('./bot_ai');
-bot = require("./bot_wrapper")
+storage = require('./storage2')
+DAO = require('./DAO')
 
-scheduler = require('./bot_ai_scheduler')
-scheduler.init()
+dropbox = require('./dropbox')
 
-require('./web');
+context = require('./context')
+context.init(function(){
+	
+	quizzMod2 = require('./quizz_mod2')
+	ai = require('./bot_ai');
+	bot = require("./bot_wrapper")
 
+	scheduler = require('./bot_ai_scheduler')
+	scheduler.init(function(){
+		
+		require('./web');	
+	})
+
+	
+})
 
