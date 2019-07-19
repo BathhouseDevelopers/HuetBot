@@ -71,9 +71,8 @@ module.exports = {
 			
 		})		
 	},
-
-
-	getNextFile: function(folder, callback){
+		
+	getNextFile: function(folder, callback, callbackNoFile){
 		console.log('dropbox.getNextFile('+folder+') invoked')
 		dbx.filesListFolder({path:'/'+folder+'/'}).then(function(data){
 			
@@ -101,9 +100,11 @@ module.exports = {
 				})
 					
 				
-			}
-			else{
+			}else{
 				console.error("no files")
+				if (callbackNoFile){
+					callbackNoFile()
+				}
 			}
 			
 		}, function(err){

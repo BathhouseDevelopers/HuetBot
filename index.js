@@ -1,4 +1,5 @@
 require('dotenv').config()
+PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3,}
 
 chats = {filter: false,		 
 		 group_prod_Huet_test: '-377088509',
@@ -7,12 +8,8 @@ chats = {filter: false,
 
 chats.list = [chats.group_prod_Huet_test, chats.group_test_BotHuetBot_dev1, chats.group_prod_Banya]
 
-
-PARAMS = {skipRandom:15, responseTimeout:3, skipBetweenMessages:3}
-
 storage = require('./storage2')
 DAO = require('./DAO')
-
 dropbox = require('./dropbox')
 
 context = require('./context')

@@ -27,7 +27,7 @@ function send2chats(url, options) {
 }
 
 module.exports = {
-	quizzIt : function() {
+	quizzIt : function(callback, callbackNoFile) {
 		try{
 
 				if (glbQuizz.active){
@@ -89,7 +89,9 @@ module.exports = {
 																};
 
 																send2chats(data.link, options)	
-															
+																if (callback){
+																	callback()
+																}
 															
 														}, function(err){
 															if (err.error!=null &&err.error.error_summary=='path/not_found/...'){
@@ -140,9 +142,9 @@ module.exports = {
 							})
 								
 							
-						}
-						else{
+						}else{
 							console.error("no files")
+							if (callbackNoFile)callbackNoFile()
 						}
 					})
 				}
@@ -176,12 +178,12 @@ module.exports = {
 		}
 			
 	},
-	sayAnswer:  function(chat_id, from, text, message_date){
+	sayAnswer:  function(chat_id, from_username){
 		
 		if (glbQuizz.hasAPic){																				
 			dbx.filesGetTemporaryLink({path:'/quizz/done/'+glbQuizz.name+"/"+aFileName}).then(function(data){
 				
-				bot.sendPhoto(chat_id, data.link, glbQuizz.answer)
+				bot.sendPhotoToChat(chat_id, data.link, glbQuizz.answer, true)
 				
 				glbQuizz.active=false
 				DAO.quizz2.putQuizz2(glbQuizz)
@@ -199,14 +201,14 @@ module.exports = {
 			
 		}else{
 			console.log("do not have qImage file")					
-			bot.sendMessage(chat_id, glbQuizz.answer)			
+			bot.sendMessageToChat(chat_id, glbQuizz.answer, true)			
 			
 			glbQuizz.active=false
 			DAO.quizz2.putQuizz2(glbQuizz)
 		}
 		
 	},
-	onAnswer: function(chat_id, from, text, message_date){
+	onAnswer: function(chat_id, from_username, from, text, message_date){
 		var tt = text.toLowerCase()
 		var ww = glbQuizz.words
 		
@@ -214,13 +216,8 @@ module.exports = {
 			var w = ww[i].trim()
 			if (tt.indexOf(w)>-1){
 				console.log(from +" guessed")
-				bot.sendMessage(chat_id, from + ", " + getRandomFromArray(["ты умничка!", "красавелла!", "бинго!", " - молодец"]))				
-				
-				setTimeout(function () {
-					quizzMod2.sayAnswer(chat_id)	
-					    }, global.PARAMS.responseTimeout*1000) 
-				
-				
+				bot.sendMessageToChat(chat_id, "@"+from_username+ ", " + getRandomFromArray(["ты умничка!", "красавелла!", "бинго!", " - молодец"]), true)								
+				quizzMod2.sayAnswer(chat_id)				
 				return true;
 			}	
 		}

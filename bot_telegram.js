@@ -20,7 +20,8 @@ _bot.on('webhook_error', (error) => {
 
 _bot.on('message', function (msg) {
 	console.log('telegram_bot: onMessage');
-	ai.onMessage(msg.chat.id, msg.from.first_name, msg.text,msg, msg.date)
+	
+	ai.onMessage(msg.chat.id, msg.from.username,  msg.from.first_name, msg.text,msg, msg.date)
 
 });
 

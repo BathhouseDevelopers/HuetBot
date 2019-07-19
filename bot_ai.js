@@ -21,177 +21,177 @@ var hue = require('./huificator')
 
 var 	msgCounter= 0
 var 	msgSkip=getRandomInt(PARAMS.skipRandom)
+
+
+var commands = {}
+
+function contains(word, array){	
+	for (var i = 0; i < array.length; i++) {
+		var kw = array[i]
+		if (word.indexOf(kw)>-1){
+			return true;
+		}
+	}
+	return false			
+}
+
+function sendGirl(command, chat_id, from_username, from, text, message_date){
+	dropbox.getNextFile("girls", function(url){			
+		bot.sendPhotoToChat(chat_id, url, "Ловите подружку", true)	
+		}, function(){
+			bot.sendMessageToChat(chat_id, "Сорян, " + from +", тёлочки кончились, попросите хозяина залить мне в копилку", true)
+		})	
+}
+
+function sendMem(command, chat_id, from_username, from, text, message_date){
+	dropbox.getNextFile("mems", function(url){			
+		bot.sendPhotoToChat(chat_id, url, "8-))", true)	
+		}, function(){
+			bot.sendMessageToChat(chat_id, "Сорян, " + from +", Мемасы закончились :(", true)
+		})	
 	
+}
+function sendFact(command, chat_id, from_username, from, text, message_date){
+	dropbox.getNextFile("facts", function(url){			
+		bot.sendPhotoToChat(chat_id, url, "Ловите подружку", true)	
+		}, function(){
+			bot.sendMessageToChat(chat_id, "Сорян, " + from +", Факты к сожалению кончились =((", true)
+		})	
+}
+
+function sendQuizz(command, chat_id, from_username, from, text, message_date){	
+	if (glbQuizz.active){
+		bot.sendMessageToChat(chat_id, "@"+from_username+", подожди, еще не разгадали предыдущую", true)	
+	}else{
+		quizzMod2.quizzIt(function(){}, function(){
+			bot.sendMessageToChat(chat_id, "Извините, на сегодня загадки закончились", true)
+		})
+	}
+}
+
+function sendQuizzAnswer(command, chat_id, from_username, from, text, message_date){
+	if (glbQuizz.active){
+		quizzMod2.sayAnswer(chat_id, from_username)	
+	}else{
+		bot.sendMessageToChat(chat_id, "@"+from_username+", какой тебе еще ответ? Проснись, все уже разгадали!", true)		
+	}	
+}
+
+
+function runCommand(command, chat_id, from_username, from, text, message_date){
+	
+	var kw1 = ["телку", "тёлку","телки", "тёлки", "телочку", "тёлочку", "тёлочек", "телочек", "девушку"]	
+	if (contains(command, kw1)){
+		console.log("the Телки")
+		sendGirl(command, chat_id, from_username, from, text, message_date)		
+		return true;
+	}
+	
+	var kw2 = ["мемчик", "мемас","мемасик", "мем", "мемасики"]	
+	if (contains(command, kw2)){
+		console.log("the Мемасы")
+		sendMem(command, chat_id, from_username, from, text, message_date)
+		return true;
+	}
+	
+	var kw3 = ["загадка", "quizz", "загадку", "загадки", "загадай"]	
+	if (contains(command, kw3)){
+		console.log("the quizz")
+		sendQuizz(command, chat_id, from_username, from, text, message_date)
+		return true;
+	}
+
+	var kw4 = ["факты", "факт", "интересно"]	
+	if (contains(command, kw4)){
+		console.log("the Fact")
+		sendFact(command, chat_id, from_username, from, text, message_date)
+		return true;
+	}
+
+	var kw5 = ["ответ"]	
+	if (contains(command, kw5)){
+		console.log("user " + from+" asked for an answer")
+		sendQuizzAnswer(command, chat_id, from_username, from, text, message_date)		
+		return true;
+	}
+
+	var kw6 = ["ping", "пинг"]	
+	if (contains(command, kw6)){
+		bot.sendMessage(chat_id, "@"+from_username+", хуинг");
+		return true;
+	}
+
+	
+	if (contains(command, ["пошути"])){
+		bot.sendMessageToChat(chat_id, "я не шучу",true);
+		return true;
+	}
+	
+	
+	// ---------------------------------------
+	console.log("Unknown command: " + command)
+	//bot.sendMessageToChat(chat_id, ((from_username!=null&&from_username!="")?("@"+from_username):"Брат")+", я не понял, что ты от меня хочешь", true)	
+	
+}
+
+
 module.exports={
-	lastMessageDateTime: new Date(),
+	lastMessageDateTime: new Date(),			
 	
-	sendMessageToChat: function(chat_id, message){
-		try{
-			bot.sendMessage(chat_id, message)	
-		}catch(e){
-			console.error(e)
-		}
-		
-	},
-	
-	sendMessageToChats: function(message){
-		console.log("send message to chats")
-		console.log(chats.list)
-		for (var i = 0; i < chats.list.length; i++) {
-			console.log(chats.list[i])
-			bot.sendMessage(chats.list[i], message)	
-		}
-
-	},	
-	sendPhotoToChats: function(url, message){
-		for (var i = 0; i < chats.list.length; i++) {
-			bot.sendPhoto(chats.list[i], url, message)	
-		}
-
-	},
-
-	
-	onMessage: function(chat_id, from, text, message_date){
+	onMessage: function(chat_id, from_username, from, text, message_date){
 		
 		// Temporary, if text null||undefined
-		if (text==null){
+		if (text==null||text==undefined||text==""){
+			console.log("--EMPTY MESSAGE : chatId:"+ chat_id+", from: "+ from + "(@"+from_username+")")
 			return
 		}
 		
-			try{
-				console.log("--MSG: chatId:"+ chat_id+", from: "+ from +", text: " + text)
-
-				// Check for commands				
-				if (text!=undefined&&text!=null){
-					if (text=="bot#quizz"){
-						this.itsQuizz()
+		try{
+			console.log("--MSG: chatId:"+ chat_id+", from: "+ from + "(@"+from_username+")" +", text: " + text)
+				
+			var fullCommand = text.toLowerCase().trim()
+			
+			// var fullCommand = lowcase, trim				
+			if (fullCommand.indexOf("бот,")>-1){
+				var command = fullCommand.substring(fullCommand.indexOf("бот,") + 4)
+				command = command.trim()
+				
+				if (command!=""){
+					if (runCommand(command, chat_id, from_username, from, text, message_date)){
 						return
-					}	
-					if (text=="bot#ping"){
-						bot.sendMessage(chat_id, "хуинг");					
-						return
-					}
-					    //bot#announce#msg_id#char_id , if chat_id is not passed, this chat_id will be used
-					if (text.indexOf("bot#announce")>-1){					
-						// if chatId 
-						this.itsAnnounce(text.split("#")[2], (text.split("#").length>3?text.split("#")[3]:chat_id))					
-						return
-					}
-
-					if (text=="bot#girl_everning"){
-						this.itsEverningGirl()					
-						return
-					}
-
-					if (text=="bot#girl_morning"){
-						this.itsMorningGirl()					
-						return
-					}
-					
-					var b = quizzMod2.onAnswer(chat_id, from, text, message_date)
-					if (b){
-						return
-					}
-					
-					
-					if (text.toLowerCase().indexOf("бот, ответ")>-1){
-						console.log("user " + from+" asked for an answer")
-						quizzMod2.sayAnswer(chat_id)
-						return
-					}
-					
-					
+					}					
 				}
-
 				
-				
-				
-	/**			
-				console.log(this.lastMessageDateTime + "->" + new Date())
-				console.log(global.PARAMS.skipBetweenMessages*1000)
-				console.log(this.lastMessageDateTime.getTime() + "->" + new Date().getTime())
-				console.log(new Date().getTime() -this.lastMessageDateTime.getTime())
-				console.log(new Date().getTime() -this.lastMessageDateTime.getTime())					
-				console.log((new Date().getTime()- this.lastMessageDateTime.getTime()) >2*1000)
-	*/		
-				if ((new Date().getTime()- this.lastMessageDateTime.getTime()) >global.PARAMS.skipBetweenMessages*1000){
-					this.lastMessageDateTime = new Date()
-					msgCounter++;
-					if (msgCounter>msgSkip){
-						msgSkip = getRandomInt(global.PARAMS.skipRandom)
-						msgCounter = 0;	    
-					    var message = hue.encode1(text)		   
-					    
-					    setTimeout(function () {
-					    	bot.sendMessage(chat_id, message);	
-					    }, global.PARAMS.responseTimeout*1000) 
-					    
-					}			
-				}else{
-					console.error("seems too many messages  at once, so missing it:  " + this.lastMessageDateTime + "->" + new Date())
-				}			
-			}catch (e) {
-				console.error(e)
 			}
+									
+			var b = quizzMod2.onAnswer(chat_id, from_username, from, fullCommand, message_date)
+			if (b){
+				return
+			}
+									
+			this.huificateMessage(chat_id, from_username, from, text, message_date)
+							
+		}catch (e) {
+			console.error(e)
+		}
 		
 		
 	},
 
-	getNextPhoto: function(folder, callback){		
-		storage.getValue(folder+".photo.number", function(i){
-			i=i?i:0		
-			dropbox.getFileUrl(folder, i+1, function(url, id){
-				try{
-					callback(url)
-					storage.setValue(folder+".photo.number", id)
-				}catch (e) {
-					console.error(e)
-				}
-				
-			})			
-		})
-
-	},
-	
-	getNextQuizz: function(callback){		
-		storage.getObject("quizz.number", function(object){
-			i=i?i:0		
-			dropbox.getFileUrl2("quizz", "q"+(i+1)+"q.jpg", i+1, function(url, id){
-				try{
-					callback(url)
-					storage.setValue("quizz.number", id)
-				}catch (e) {
-					console.error(e)
-				}
-				
-			})			
-		})
-
-	},
-	
-	
-	itsLunchTime: function(){
-		console.log("itsLunchTime")		
-		ai.getNextPhoto("lunch", function(url){ 
-			ai.sendPhotoToChats(url, ":-)))")
-		})
-	},
-
-	itsQuizz: function(){
-		console.log("itsQuizz")
-		quizzMod2.quizzIt()
-								
-	},
-	
-	itsAnnounce: function(id, chatId){
-		console.log("itsAnounce#"+id+"$"+chatId)
-		DAO.announcement.getAnnouncement(id, function(obj){
-			ai.sendMessageToChat(chatId, obj.text)			
-		})
-		
-		
-								
+	huificateMessage: function(chat_id, from_username, from, text, message_date){
+		if ((new Date().getTime()- this.lastMessageDateTime.getTime()) >global.PARAMS.skipBetweenMessages*1000){
+			this.lastMessageDateTime = new Date()
+			msgCounter++;
+			if (msgCounter>msgSkip){
+				msgSkip = getRandomInt(global.PARAMS.skipRandom)
+				msgCounter = 0;	    
+			    var message = hue.encode1(text)		   
+			    bot.sendMessageToChat(chat_id, message, true);			    			    
+			}			
+		}else{
+			console.error("seems too many messages  at once, so missing it:  " + this.lastMessageDateTime + "->" + new Date())
+		}
 	}
-
+	
 	
 }

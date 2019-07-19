@@ -50,7 +50,7 @@ module.exports = {
 							try{
 								console.log("executing CRON " + id)
 								DAO.cron.getCron(id, function(cron){								  
-									ai.sendMessageToChats(getRandomFromArray(cron.text))																															
+									bot.sendMessageToChats(getRandomFromArray(cron.text))																															
 								})															
 							}catch(e){
 								console.error("error invocating cron job " + id)
@@ -70,7 +70,7 @@ module.exports = {
 								console.log("executing CRON " + id)
 								DAO.cron.getCron(id, function(cron){								  
 									dropbox.getNextFile(cron.folder, function(url){									
-										ai.sendPhotoToChats(url, getRandomFromArray(cron.text))	
+										bot.sendPhotoToChats(url, getRandomFromArray(cron.text))	
 										})		 																																				
 								})							
 							
