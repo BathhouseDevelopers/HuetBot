@@ -110,10 +110,7 @@ module.exports = {
 																inline_keyboard : [ [ {
 																	text : 'Подсказка',
 																	callback_data : 'quizz#hint#'
-																}, {
-																	text : 'Узнать ответ',
-																	callback_data : 'quizz#answer#'
-																} ], ]
+																}], ]
 															})
 														};
 
