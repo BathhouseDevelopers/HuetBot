@@ -193,6 +193,12 @@ function runCommand(command, chat_id, from_username, from, text, message_date){
 		bot.sendMessageToChat(chat_id, from_ + ", сам " + command ,false);
 		return true;
 	}
+
+	if (contains(command, ["песню"])){
+		bot.sendMessageToChat(chat_id, from_ + ", https://music.yandex.ru",false);
+		return true;
+	}
+
 	
 	// ---------------------------------------
 	console.log("Unknown command: " + command)
