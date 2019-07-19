@@ -66,126 +66,42 @@ module.exports={
 				})
 			}	
 		},
-	
-		quizz:{
-			getQuizz: function(id, callback){
-				storage.getObject('quizz',{id: parseInt(id)}, function(quizz){
-					if (quizz!=null){
-						callback(quizz)	
-					}else{
-						throw new Error("Quizz id="+id+"not found");
-						
-					}
-					 
-					
-				})
-			},			
-			getNewQuizz: function(callback){
-				storage.getObject('quizz',{sentQuestion: null}, function(quizz){
-					if (quizz!=null){
-						callback(quizz)	
-					}else{
-						throw new Error("New unsent quizz not found");
-						
-					}
-				})
-			},
-			setQuizzAsked: function(id){
-				storage.updateObject('quizz', {id : parseInt(id)}, {sentQuestion : true}, function(res) {
-					//console.log(res)
-				})
-			},
-			setQuizzAnswered: function(id){
-				storage.updateObject('quizz', {id : parseInt(id)}, {sentanswer : true}, function(res) {
-					//console.log(res)
-				})
-			},
-
-			incrementAskAnswer(id, name, callback){
-				console.log("incrementAskAnswer")
-				storage.getObject('quizz',{id: parseInt(id)}, function(quizz){
-					console.log("incrementAskAnswer#getObject ")
-					//console.log(quizz)
-					if (quizz.askAnswer==null||quizz.askAnswer==NaN){
-						quizz.askAnswer=[]
-					}
-					if (quizz.askAnswer.indexOf(name)<0){
-						quizz.askAnswer.push(name)
-					}
-					
-					storage.updateObject('quizz', {id : quizz.id}, {askAnswer : quizz.askAnswer}, function(res) {
-						console.log("incrementAskAnswer#updateObject ")
-						console.log(quizz)
-						callback(quizz)
-					})
-					
-				})
-				
-			}
 			
-		},
-		quizz2:{
-			getQuizz2: function(callback){
-				storage.getObject('quizz2',{type: 'quizz2'}, function(quizz){
-					if (quizz!=null){
-						callback(quizz)	
+		ai:{
+			getAI: function(callback){
+				storage.getObject('context',{type: 'ai'}, function(obj){
+					if (obj!=null){
+						callback(obj)	
 					}else{
-						throw new Error("Quizz2  object not found");
-						
+						throw new Error("ai  object not found");						
 					}
-					 
-					
 				})
 			},
-			putQuizz2: function(quizz, callback){
-				storage.updateObject('quizz2', {type: 'quizz2'}, quizz, function(res) {
+			putAI: function(obj, callback){
+				storage.updateObject('context', {type: 'ai'}, obj, function(res) {
 					if (callback){
 						callback(res)
 					}
 				})
 				
-			},
-			getNewQuizz: function(callback){
-				storage.getObject('quizz',{sentQuestion: null}, function(quizz){
-					if (quizz!=null){
-						callback(quizz)	
+			}
+		},		
+		quizz2:{
+			getQuizz2: function(callback){
+				storage.getObject('context',{type: 'quizz2'}, function(obj){
+					if (obj!=null){
+						callback(obj)	
 					}else{
-						throw new Error("New unsent quizz not found");
-						
+						throw new Error("Quizz2  object not found");						
 					}
 				})
 			},
-			setQuizzAsked: function(id){
-				storage.updateObject('quizz', {id : parseInt(id)}, {sentQuestion : true}, function(res) {
-					//console.log(res)
-				})
-			},
-			setQuizzAnswered: function(id){
-				storage.updateObject('quizz', {id : parseInt(id)}, {sentanswer : true}, function(res) {
-					//console.log(res)
-				})
-			},
-
-			incrementAskAnswer(id, name, callback){
-				console.log("incrementAskAnswer")
-				storage.getObject('quizz',{id: parseInt(id)}, function(quizz){
-					console.log("incrementAskAnswer#getObject ")
-					//console.log(quizz)
-					if (quizz.askAnswer==null||quizz.askAnswer==NaN){
-						quizz.askAnswer=[]
+			putQuizz2: function(obj, callback){
+				storage.updateObject('context', {type: 'quizz2'}, obj, function(res) {
+					if (callback){
+						callback(res)
 					}
-					if (quizz.askAnswer.indexOf(name)<0){
-						quizz.askAnswer.push(name)
-					}
-					
-					storage.updateObject('quizz', {id : quizz.id}, {askAnswer : quizz.askAnswer}, function(res) {
-						console.log("incrementAskAnswer#updateObject ")
-						console.log(quizz)
-						callback(quizz)
-					})
-					
-				})
-				
+				})				
 			}
 		}
 }

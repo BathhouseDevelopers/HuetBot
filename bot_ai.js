@@ -36,37 +36,98 @@ function contains(word, array){
 }
 
 function sendGirl(command, chat_id, from_username, from, text, message_date){
-	dropbox.getNextFile("girls", function(url){			
-		bot.sendPhotoToChat(chat_id, url, "Ловите подружку", true)	
-		}, function(){
-			bot.sendMessageToChat(chat_id, "Сорян, " + from +", тёлочки кончились, попросите хозяина залить мне в копилку", true)
-		})	
+	if (glbAI.girlLastDate == new Date().toLocaleDateString()&&(glbAI.girlCount>2)){
+		bot.sendMessageToChat(chat_id, "Ну сколько вам еще тёлок? Не обдрочитесь? хватит на сегодня!!", true)
+	}else{
+		dropbox.getNextFile("girls", function(url){			
+			bot.sendPhotoToChat(chat_id, url, "Ловите подружку", true)			
+			if (glbAI.girlLastDate == new Date().toLocaleDateString()){
+				glbAI.girlCount++ 
+			}else{
+				glbAI.girlLastDate = new Date().toLocaleDateString()
+				glbAI.girlCount = 1
+			}
+			DAO.ai.putAI(glbAI)
+			console.log(glbAI)
+			
+			}, function(){
+				bot.sendMessageToChat(chat_id, "Сорян, " + from +", тёлочки кончились, попросите хозяина залить мне в копилку", true)
+		})
+	}
+		
+		
 }
 
 function sendMem(command, chat_id, from_username, from, text, message_date){
-	dropbox.getNextFile("mems", function(url){			
-		bot.sendPhotoToChat(chat_id, url, "8-))", true)	
-		}, function(){
-			bot.sendMessageToChat(chat_id, "Сорян, " + from +", Мемасы закончились :(", true)
-		})	
-	
-}
-function sendFact(command, chat_id, from_username, from, text, message_date){
-	dropbox.getNextFile("facts", function(url){			
-		bot.sendPhotoToChat(chat_id, url, "Ловите подружку", true)	
-		}, function(){
-			bot.sendMessageToChat(chat_id, "Сорян, " + from +", Факты к сожалению кончились =((", true)
-		})	
-}
-
-function sendQuizz(command, chat_id, from_username, from, text, message_date){	
-	if (glbQuizz.active){
-		bot.sendMessageToChat(chat_id, "@"+from_username+", подожди, еще не разгадали предыдущую", true)	
+	if (glbAI.memLastDate == new Date().toLocaleDateString()&&(glbAI.memCount>2)){
+		bot.sendMessageToChat(chat_id, "Мемы, мемы, сколько можно!! потерпите до завтра. Завтра приходите!", true)
 	}else{
-		quizzMod2.quizzIt(function(){}, function(){
-			bot.sendMessageToChat(chat_id, "Извините, на сегодня загадки закончились", true)
+		dropbox.getNextFile("mems", function(url){			
+			bot.sendPhotoToChat(chat_id, url, "8-))", true)	
+			if (glbAI.memLastDate == new Date().toLocaleDateString()){
+				glbAI.memCount++ 
+			}else{
+				glbAI.memLastDate = new Date().toLocaleDateString()
+				glbAI.memCount = 1
+			}
+			DAO.ai.putAI(glbAI)
+			console.log(glbAI)
+			
+		}, function(){
+			bot.sendMessageToChat(chat_id, "Сорян, " + from +", мемасики закончились :(", true)
 		})
 	}
+		
+	
+			
+}
+function sendFact(command, chat_id, from_username, from, text, message_date){
+	if (glbAI.memLastDate == new Date().toLocaleDateString()&&(glbAI.memCount>2)){
+		bot.sendMessageToChat(chat_id, "Угомонитесь с этими занимательными фактами, на завтра оставьте!", true)
+	}else{
+		dropbox.getNextFile("facts", function(url){			
+			bot.sendPhotoToChat(chat_id, url, "Это интересно...", true)	
+			if (glbAI.memLastDate == new Date().toLocaleDateString()){
+				glbAI.memCount++ 
+			}else{
+				glbAI.memLastDate = new Date().toLocaleDateString()
+				glbAI.memCount = 1
+			}
+			DAO.ai.putAI(glbAI)
+			console.log(glbAI)
+			
+		}, function(){
+			bot.sendMessageToChat(chat_id, "Сорян, " + from +", к сожалению интересных фактов не осталось :(", true)
+		})
+	}
+	
+	
+}
+
+function sendQuizz(command, chat_id, from_username, from, text, message_date){
+	console.log(glbAI)
+	if (glbAI.quizzLastDate == new Date().toLocaleDateString()&& glbAI.quizzCount>2){
+		bot.sendMessageToChat(chat_id, "Брат, на сегодня загадок достаточно", true)
+	}else{
+		if (glbQuizz.active){
+			bot.sendMessageToChat(chat_id, "@"+from_username+", подожди, еще не разгадали предыдущую", true)	
+		}else{
+			quizzMod2.quizzIt(function(){
+				if (glbAI.quizzLastDate == new Date().toLocaleDateString()){
+					glbAI.quizzCount++ 
+				}else{
+					glbAI.quizzLastDate = new Date().toLocaleDateString()
+					glbAI.quizzCount = 1
+				}
+				DAO.ai.putAI(glbAI)
+				console.log(glbAI)
+				
+			}, function(){
+				bot.sendMessageToChat(chat_id, "Извините, на сегодня загадки закончились", true)
+			})
+		}	
+	}					
+	
 }
 
 function sendQuizzAnswer(command, chat_id, from_username, from, text, message_date){
@@ -79,8 +140,9 @@ function sendQuizzAnswer(command, chat_id, from_username, from, text, message_da
 
 
 function runCommand(command, chat_id, from_username, from, text, message_date){
+	var from_ = "@"+from_username
 	
-	var kw1 = ["телку", "тёлку","телки", "тёлки", "телочку", "тёлочку", "тёлочек", "телочек", "девушку"]	
+	var kw1 = ["телку", "тёлку","телки", "тёлки", "телочку", "тёлочку", "тёлочек", "телочек", "девушку", "бабы", "бабу"]	
 	if (contains(command, kw1)){
 		console.log("the Телки")
 		sendGirl(command, chat_id, from_username, from, text, message_date)		
@@ -117,7 +179,7 @@ function runCommand(command, chat_id, from_username, from, text, message_date){
 
 	var kw6 = ["ping", "пинг"]	
 	if (contains(command, kw6)){
-		bot.sendMessage(chat_id, "@"+from_username+", хуинг");
+		bot.sendMessage(chat_id, from_+", хуинг");
 		return true;
 	}
 
@@ -127,6 +189,10 @@ function runCommand(command, chat_id, from_username, from, text, message_date){
 		return true;
 	}
 	
+	if (contains(command, ["сука", "хуй", "пизда", "пидор", "гей", "пидр"])){
+		bot.sendMessageToChat(chat_id, from_ + ", сам " + command ,false);
+		return true;
+	}
 	
 	// ---------------------------------------
 	console.log("Unknown command: " + command)
