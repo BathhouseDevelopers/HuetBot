@@ -30,7 +30,8 @@
     "connect-busboy": "latest",
     "dotenv": "latest",
     "ejs": "latest",
-    "properties-parser": "latest"
+    "properties-parser": "latest",
+    "node-properties-parser": "latest"
     
   }
 }
